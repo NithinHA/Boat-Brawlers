@@ -17,7 +17,7 @@ namespace BaseObjects.Player
         public bool HasWeapon => _heldWeapon != null;
         private float _cachedRigWeight;
 
-        private const int SimpleAttackTypes = 2;
+        private const int SimpleAttackTypes = 4;
 
         private void Start()
         {
@@ -50,6 +50,7 @@ namespace BaseObjects.Player
         {
             _cachedRigWeight = m_Player.Rig.weight;
             m_Player.Rig.weight = 0;
+            m_Player.PlayerInteraction.IsInteractionEnabled = false;
 
             if (HasWeapon)
             {
@@ -101,6 +102,8 @@ namespace BaseObjects.Player
         {
             DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, _cachedRigWeight, .01f);
             m_Player.PlayerMovement.IsMovementEnabled = true;
+            m_Player.PlayerInteraction.IsInteractionEnabled = true;
+            _timer = .1f;
         }
 
 #endregion

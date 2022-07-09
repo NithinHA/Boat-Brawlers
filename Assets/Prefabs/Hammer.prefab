@@ -198,7 +198,7 @@ MonoBehaviour:
   - {fileID: 2283392925981169322}
   AttackCooldown: 1.5
   Type: 1
-  AttackAnimVarities: 1
+  AttackAnimVarities: 3
 --- !u!1 &8979249989409233615
 GameObject:
   m_ObjectHideFlags: 0

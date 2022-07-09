@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace BaseObjects.Player
 {
@@ -8,7 +9,7 @@ namespace BaseObjects.Player
     {
         [SerializeField] private Player m_Player;
         [Space]
-        [SerializeField] private float m_Speed = 5f;
+        [SerializeField] private float m_MaxSpeed = 5f;
         [SerializeField] private LayerMask m_AimLayerMask;
 
         [Header("AB test")]
@@ -17,6 +18,7 @@ namespace BaseObjects.Player
         private Vector3 mPlayerMovement = Vector3.zero;
         private Camera mMainCam;
         private Transform mCameraHolder;
+        [SerializeField] private float _curSpeed;
 
         public bool IsMovementEnabled = true;
 
@@ -25,6 +27,17 @@ namespace BaseObjects.Player
             mMainCam = Camera.main;
             if(mMainCam!= null)
                 mCameraHolder = mMainCam.transform.parent;
+
+            _curSpeed = m_MaxSpeed;
+
+            m_Player.PlayerInteraction.OnItemPicked += OnItemPicked;
+            m_Player.PlayerInteraction.OnItemDropped += OnItemDropped;
+        }
+
+        private void OnDestroy()
+        {
+            m_Player.PlayerInteraction.OnItemPicked -= OnItemPicked;
+            m_Player.PlayerInteraction.OnItemDropped -= OnItemDropped;
         }
 
         private void Update()
@@ -65,7 +78,7 @@ namespace BaseObjects.Player
             if (mPlayerMovement.magnitude > 0)
             {
                 mPlayerMovement.Normalize();
-                mPlayerMovement *= m_Speed * Time.deltaTime;
+                mPlayerMovement *= _curSpeed * Time.deltaTime;
                 m_Player.Rb.MovePosition(transform.position + mPlayerMovement);
             }
         }
@@ -89,6 +102,27 @@ namespace BaseObjects.Player
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(mPlayerMovement.normalized), .1f);
             }
         }
+
+#region Event listeners
+
+        /// <summary>
+        /// diff follows the curve with points: 1, 1.75, 2.25, 2.5; corresponding to weights
+        /// Subsequent difference after each weight is decreased by 0.25; ie- Sequence: 1, 0.75, 0.5, 0.25 
+        /// </summary>
+        private void OnItemPicked(InteractableObject item)
+        {
+            float weight = item.Weight;
+            Mathf.Clamp(weight, 0, 4);
+            float diff = 1.125f * item.Weight - 0.125f * Mathf.Pow(weight, 2);      // difference based on the polynomial equation
+            _curSpeed = m_MaxSpeed - diff;
+        }
+
+        private void OnItemDropped(InteractableObject item)
+        {
+            _curSpeed = m_MaxSpeed;
+        }
+
+#endregion
 
         private void OnDrawGizmos()
         {

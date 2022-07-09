@@ -700,11 +700,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Player: {fileID: 4641553347828722631}
-  m_Speed: 3
+  m_MaxSpeed: 3.5
   m_AimLayerMask:
     serializedVersion: 2
     m_Bits: 256
   m_AimAlwaysForward: 1
+  _curSpeed: 0
   IsMovementEnabled: 1
 --- !u!114 &2092589426
 MonoBehaviour:

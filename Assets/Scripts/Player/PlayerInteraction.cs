@@ -15,8 +15,10 @@ namespace BaseObjects.Player
 
         private Dictionary<PivotType, Transform> _pivotMap = new Dictionary<PivotType, Transform>();
 
+        public bool IsInteractionEnabled = true;
         public Action<InteractableObject> OnItemPicked;
         public Action<InteractableObject> OnItemDropped;
+
 
         private void Start()
         {
@@ -38,6 +40,9 @@ namespace BaseObjects.Player
         /// </summary>
         public void PickItem()
         {
+            if (!IsInteractionEnabled)
+                return;
+
             InteractableObject item = InteractablesController.Instance.HighlightedObject;
             if (item == null)
                 return;
@@ -55,6 +60,9 @@ namespace BaseObjects.Player
 
         public void DropItem()
         {
+            if (!IsInteractionEnabled)
+                return;
+
             InteractableObject item = InteractablesController.Instance.HeldObject;
             if (item == null)
                 return;
