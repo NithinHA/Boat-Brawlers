@@ -37,9 +37,9 @@ public class PlayerMovementTopDown : MonoBehaviour
         float playerInputY = Input.GetAxis("Vertical");
 
         bool didDive = Input.GetKeyDown(KeyCode.LeftControl);
-        if (didDive && !mAnimator.GetCurrentAnimatorStateInfo(0).IsName("Dive"))
+        if (didDive && !mAnimator.GetCurrentAnimatorStateInfo(0).IsName(Constants.Animation.DIVE))
         {
-            mAnimator.SetTrigger("Dive");
+            mAnimator.SetTrigger(Constants.Animation.DIVE);
         }
 
         mPlayerMovement = new Vector3(playerInputX, 0, playerInputY);
@@ -49,8 +49,8 @@ public class PlayerMovementTopDown : MonoBehaviour
         float velocityZ = Vector3.Dot(mPlayerMovement.normalized, transform.forward);
         float velocityX = Vector3.Dot(mPlayerMovement.normalized, transform.right);
         //Debug.Log("velX:" + velocityX + ", velZ:" + velocityZ);
-        mAnimator.SetFloat("VelocityZ", velocityZ, .1f, Time.deltaTime);
-        mAnimator.SetFloat("VelocityX", velocityX, .1f, Time.deltaTime);
+        mAnimator.SetFloat(Constants.Animation.VELOCITY_Z, velocityZ, .1f, Time.deltaTime);
+        mAnimator.SetFloat(Constants.Animation.VELOCITY_X, velocityX, .1f, Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -59,7 +59,6 @@ public class PlayerMovementTopDown : MonoBehaviour
         {
             mPlayerMovement.Normalize();
             mPlayerMovement *= m_Speed * Time.deltaTime;
-            //transform.Translate(mPlayerMovement, Space.World);
             mRB.MovePosition(transform.position + mPlayerMovement);
         }
     }
@@ -72,19 +71,7 @@ public class PlayerMovementTopDown : MonoBehaviour
             Vector3 direction = hitInfo.point - transform.position;
             direction.y = 0;
             direction.Normalize();
-            // float angle = Vector3.SignedAngle(transform.forward, direction, Vector3.up);
-            // Debug.Log(angle);
-            //mAnimator.SetFloat("RotAngle", angle, .1f, Time.deltaTime);
-            //if (Mathf.Abs(angle) > 2f)
-            //{
-            //    mAnimator.SetFloat("RotAngle", Mathf.Clamp(angle, -2f, 2f), .1f, Time.deltaTime);
-            //}
-            //else
-            //{
-            //    mAnimator.SetFloat("RotAngle", Mathf.Clamp(0, -2f, 2f), .1f, Time.deltaTime);
-            //}
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), .1f);
-            //transform.forward = direction;
         }
     }
 
