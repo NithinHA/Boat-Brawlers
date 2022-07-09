@@ -4,15 +4,19 @@ using BaseObjects;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-namespace Player
+namespace BaseObjects.Player
 {
     public class PlayerInteraction : MonoBehaviour
     {
+        [SerializeField] private Player m_Player;
+        [Space]
         [SerializeField] private List<AttachmentPivot> m_Pivots;
         [SerializeField] private Transform m_Rh, m_Lh;
-        [SerializeField] private Rig m_PlayerRig;
 
         private Dictionary<PivotType, Transform> _pivotMap = new Dictionary<PivotType, Transform>();
+
+        public Action<InteractableObject> OnItemPicked;
+        public Action<InteractableObject> OnItemDropped;
 
         private void Start()
         {
@@ -45,7 +49,8 @@ namespace Player
             AlignPivotAndHandPositions(targetPivot, item);
             item.transform.SetParent(targetPivot);
             item.Pick();
-            m_PlayerRig.weight = item.RigTargetWeight;     // try Tweening this value
+            m_Player.Rig.weight = item.RigTargetWeight;     // try Tweening this value
+            OnItemPicked?.Invoke(item);
         }
 
         public void DropItem()
@@ -56,8 +61,9 @@ namespace Player
 
             item.transform.SetParent(null);
             ResetPivotAndHandPositions(_pivotMap[item.PivotType]);
-            m_PlayerRig.weight = 0;     // try Tweening this value
+            m_Player.Rig.weight = 0;     // try Tweening this value
             item.Drop();
+            OnItemDropped?.Invoke(item);
         }
 
         private void AlignPivotAndHandPositions(Transform pivot, InteractableObject item)
@@ -111,7 +117,7 @@ namespace Player
 
     public enum PivotType
     {
-        Default, Shoulder
+        Shoulder, RightHand, LeftHand
     }
 
     [System.Serializable]

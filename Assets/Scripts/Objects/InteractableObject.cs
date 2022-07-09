@@ -1,4 +1,4 @@
-using Player;
+using BaseObjects.Player;
 using UnityEngine;
 
 namespace BaseObjects

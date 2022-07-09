@@ -23,14 +23,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110109029}
-  m_LocalRotation: {x: -0.36148888, y: 0.5383529, z: -0.31877583, w: -0.6912915}
-  m_LocalPosition: {x: 0.199, y: 0.894, z: 0.258}
+  m_LocalRotation: {x: -0.38564304, y: 0.5881767, z: -0.41142404, w: -0.57970494}
+  m_LocalPosition: {x: -0.053, y: 0.094, z: 0.057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2283392925981169317}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 68.607, y: -88.326, z: 3.671}
 --- !u!1 &988070758
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 2283392925981169320}
   - component: {fileID: 2283392925981169323}
   - component: {fileID: 2283392925981169322}
-  - component: {fileID: 1154766434}
+  - component: {fileID: 2283392927007867738}
   m_Layer: 0
   m_Name: Hammer
   m_TagString: Untagged
@@ -174,7 +174,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.16651621, y: 0.1611172, z: 0.35318315}
   m_Center: {x: 0, y: 0.7758588, z: 0.019150138}
---- !u!114 &1154766434
+--- !u!114 &2283392927007867738
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,11 +183,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2283392925981169316}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35df9e21d012b4383be20a49788ca133, type: 3}
+  m_Script: {fileID: 11500000, guid: e70e770ae10da4a529a7f349d826da4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 1
-  PivotType: 0
+  PivotType: 1
   RefPivot: {fileID: 110109030}
   RigTargetWeight: 1
   Ref_Rh: {fileID: 988070759}
@@ -196,6 +196,9 @@ MonoBehaviour:
   m_Colliders:
   - {fileID: 2283392925981169323}
   - {fileID: 2283392925981169322}
+  AttackCooldown: 1.5
+  Type: 1
+  AttackAnimVarities: 1
 --- !u!1 &8979249989409233615
 GameObject:
   m_ObjectHideFlags: 0

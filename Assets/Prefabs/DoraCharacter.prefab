@@ -28,7 +28,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3384203408522712102}
   - {fileID: 1036999508}
   - {fileID: 51908758}
   m_Father: {fileID: 2030003843400456475}
@@ -63,7 +62,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 43372593}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &350748091
 GameObject:
@@ -125,7 +124,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 43372593}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1571173408
 GameObject:
@@ -588,9 +587,10 @@ GameObject:
   - component: {fileID: 1686550858226959278}
   - component: {fileID: 765545412}
   - component: {fileID: 765545407}
+  - component: {fileID: 4641553347828722631}
   - component: {fileID: 765545411}
   - component: {fileID: 2092589426}
-  - component: {fileID: 1904739265}
+  - component: {fileID: 1904739267}
   m_Layer: 0
   m_Name: DoraCharacter
   m_TagString: Untagged
@@ -668,6 +668,25 @@ CapsuleCollider:
   m_Height: 1.0412464
   m_Direction: 1
   m_Center: {x: 0, y: 0.57057333, z: 0}
+--- !u!114 &4641553347828722631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686550858226959265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d4838152f9634aa38cdcea40fae9326, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  PlayerMovement: {fileID: 765545411}
+  PlayerInteraction: {fileID: 3370526691259923144}
+  PlayerAttack: {fileID: 1904739267}
+  Anim: {fileID: 1686550858226959278}
+  Rig: {fileID: 1758320533}
+  Rb: {fileID: 765545412}
 --- !u!114 &765545411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,11 +699,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077b049448df82b45ae12d53ac8e8616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Player: {fileID: 4641553347828722631}
   m_Speed: 3
   m_AimLayerMask:
     serializedVersion: 2
     m_Bits: 256
   m_AimAlwaysForward: 1
+  IsMovementEnabled: 1
 --- !u!114 &2092589426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701,7 +722,7 @@ MonoBehaviour:
   - m_Rig: {fileID: 1758320533}
     m_Active: 1
   m_Effectors: []
---- !u!114 &1904739265
+--- !u!114 &1904739267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -710,10 +731,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1686550858226959265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 303c05908ddf1424e8c9ad499f096357, type: 3}
+  m_Script: {fileID: 11500000, guid: fcfdaa952d07147b5b0e36e27c192127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weight: 2
+  m_Player: {fileID: 4641553347828722631}
+  m_DefaultCooldownTime: 0.5
 --- !u!1 &1853687250398477494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,14 +1086,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b031077ab74af4566b8e6bc9bb2fdac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Player: {fileID: 4641553347828722631}
   m_Pivots:
   - Type: 0
-    Pivot: {fileID: 3384203408522712102}
-  - Type: 1
     Pivot: {fileID: 350748092}
+  - Type: 1
+    Pivot: {fileID: 3384203408522712102}
   m_Rh: {fileID: 1036999508}
   m_Lh: {fileID: 51908758}
-  m_PlayerRig: {fileID: 1758320533}
 --- !u!1 &2988098308207107687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,6 +1635,7 @@ Transform:
   - {fileID: 802964379610396312}
   - {fileID: 7289861585563916796}
   - {fileID: 7970436705040509454}
+  - {fileID: 3384203408522712102}
   m_Father: {fileID: 4050392107575331672}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2385,7 +2408,7 @@ GameObject:
   - component: {fileID: 3384203408522712102}
   - component: {fileID: 7245311332854443388}
   m_Layer: 0
-  m_Name: Pivot_Default
+  m_Name: Pivot_RightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2398,13 +2421,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7541865680569102858}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.47760722, y: 0.5257864, z: -0.52702856, w: -0.4665628}
+  m_LocalPosition: {x: 0.027815096, y: -0.50336814, z: 1.0664735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 43372593}
-  m_RootOrder: 0
+  m_Father: {fileID: 149480849066770744}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7245311332854443388
 MonoBehaviour:

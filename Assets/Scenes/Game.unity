@@ -873,7 +873,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PersistentOnSceneChange: 0
-  m_WeightMultiplier: 1
+  m_WeightMultiplier: 0.5
   m_MovementThreshold: 0
   m_TumbleThreshold: {x: 30, y: 330}
   m_Rb: {fileID: 1810058791}

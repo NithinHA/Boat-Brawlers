@@ -1473,7 +1473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 2
-  PivotType: 1
+  PivotType: 0
   RefPivot: {fileID: 1405577033}
   RigTargetWeight: 1
   Ref_Rh: {fileID: 251017041}
