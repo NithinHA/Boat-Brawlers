@@ -1,5 +1,98 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &251017040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 251017041}
+  m_Layer: 0
+  m_Name: ref_Rh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &251017041
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251017040}
+  m_LocalRotation: {x: 0.71230626, y: -0.5867168, z: 0.07148409, w: 0.37851468}
+  m_LocalPosition: {x: 0.154, y: 0.8356, z: 0.0631}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6986476149079779356}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 38.544, y: -154.044, z: -91.83}
+--- !u!1 &1405577032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1405577033}
+  m_Layer: 0
+  m_Name: ref_Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1405577033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405577032}
+  m_LocalRotation: {x: 0, y: 0, z: 0.0209424, w: 0.9997807}
+  m_LocalPosition: {x: 0.083, y: -1.243, z: -0.119}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6986476149079779356}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 2.4}
+--- !u!1 &1708901578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1708901579}
+  m_Layer: 0
+  m_Name: ref_Lh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1708901579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708901578}
+  m_LocalRotation: {x: 0.7534305, y: 0.630612, z: 0.13138497, w: 0.13194345}
+  m_LocalPosition: {x: -0.154, y: 0.8356, z: 0.0631}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6986476149079779356}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 178.102, y: 338.61798, z: 279.784}
 --- !u!1 &15834783518932295
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,6 +1404,7 @@ GameObject:
   - component: {fileID: 6986476149079779356}
   - component: {fileID: 6986476149079779354}
   - component: {fileID: 6986476149079779355}
+  - component: {fileID: 6986476150293269549}
   m_Layer: 0
   m_Name: Bagpack
   m_TagString: Untagged
@@ -1331,6 +1425,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2531760788006017295}
+  - {fileID: 1405577033}
+  - {fileID: 251017041}
+  - {fileID: 1708901579}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1361,8 +1458,29 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6986476150293269549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6986476149079779357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35df9e21d012b4383be20a49788ca133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 2
+  PivotType: 1
+  RefPivot: {fileID: 1405577033}
+  RigTargetWeight: 1
+  Ref_Rh: {fileID: 251017041}
+  Ref_Lh: {fileID: 1708901579}
+  m_Rb: {fileID: 6986476149079779355}
+  m_Colliders:
+  - {fileID: 6986476149079779354}
 --- !u!1 &7243433500883417115
 GameObject:
   m_ObjectHideFlags: 0

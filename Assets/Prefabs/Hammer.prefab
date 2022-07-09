@@ -1,5 +1,98 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &110109029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 110109030}
+  m_Layer: 0
+  m_Name: ref_Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &110109030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110109029}
+  m_LocalRotation: {x: -0.36148888, y: 0.5383529, z: -0.31877583, w: -0.6912915}
+  m_LocalPosition: {x: 0.199, y: 0.894, z: 0.258}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2283392925981169317}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &988070758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 988070759}
+  m_Layer: 0
+  m_Name: ref_Rh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &988070759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988070758}
+  m_LocalRotation: {x: 0.59550804, y: -0.25664786, z: -0.106591865, w: 0.75375074}
+  m_LocalPosition: {x: 0.23385258, y: 0.90711534, z: 0.1888796}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2283392925981169317}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -65.61}
+--- !u!1 &1660384277
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1660384278}
+  m_Layer: 0
+  m_Name: ref_Lh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1660384278
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1660384277}
+  m_LocalRotation: {x: -0.0130069405, y: 0.67117614, z: 0.6083427, w: 0.423406}
+  m_LocalPosition: {x: -0.23578565, y: 1.1274881, z: 0.2797851}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2283392925981169317}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 165, z: 45}
 --- !u!1 &2283392925981169316
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,6 +105,7 @@ GameObject:
   - component: {fileID: 2283392925981169320}
   - component: {fileID: 2283392925981169323}
   - component: {fileID: 2283392925981169322}
+  - component: {fileID: 1154766434}
   m_Layer: 0
   m_Name: Hammer
   m_TagString: Untagged
@@ -29,8 +123,12 @@ Transform:
   m_LocalRotation: {x: 0.10739203, y: 0, z: 0, w: 0.9942168}
   m_LocalPosition: {x: 1.733, y: 1.056, z: -0.814}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8635481749689368693}
+  - {fileID: 110109030}
+  - {fileID: 988070759}
+  - {fileID: 1660384278}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 12.33, y: 0, z: 0}
@@ -76,6 +174,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.16651621, y: 0.1611172, z: 0.35318315}
   m_Center: {x: 0, y: 0.7758588, z: 0.019150138}
+--- !u!114 &1154766434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2283392925981169316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35df9e21d012b4383be20a49788ca133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  PivotType: 0
+  RefPivot: {fileID: 110109030}
+  RigTargetWeight: 1
+  Ref_Rh: {fileID: 988070759}
+  Ref_Lh: {fileID: 1660384278}
+  m_Rb: {fileID: 2283392925981169320}
+  m_Colliders:
+  - {fileID: 2283392925981169323}
+  - {fileID: 2283392925981169322}
 --- !u!1 &8979249989409233615
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,6 +224,7 @@ Transform:
   m_LocalRotation: {x: -0.6861466, y: 0.6848032, z: 0.17085171, w: 0.17623053}
   m_LocalPosition: {x: -0.0026650745, y: 0.51821876, z: 0.010576844}
   m_LocalScale: {x: 0.5000001, y: 0.5000002, z: 0.50000024}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2283392925981169317}
   m_RootOrder: 0
@@ -127,10 +248,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -155,3 +278,4 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}

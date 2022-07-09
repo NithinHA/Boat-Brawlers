@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using BaseObjects;
 
 public class RaftController : Singleton<RaftController>
 {

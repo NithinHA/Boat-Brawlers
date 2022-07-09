@@ -1,17 +1,20 @@
 using UnityEngine;
 
-public class BaseObject : MonoBehaviour
+namespace BaseObjects
 {
-    public float Weight = 1f;
-
-    protected virtual void Start()
+    public class BaseObject : MonoBehaviour
     {
-        RaftController.Instance.OnObjectCreated?.Invoke(this);
-    }
+        public float Weight = 1f;
 
-    protected virtual void OnDestroy()
-    {
-        if(RaftController.Instance != null)
-            RaftController.Instance.OnObjectDestroyed?.Invoke(this);
+        protected virtual void Start()
+        {
+            RaftController.Instance.OnObjectCreated?.Invoke(this);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            if(RaftController.Instance != null)
+                RaftController.Instance.OnObjectDestroyed?.Invoke(this);
+        }
     }
 }
