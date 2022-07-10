@@ -57960,14 +57960,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.33333334
-    functionName: OnAttackAnimDisableMovement
+    functionName: AnimEvent_AttackBegin
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.6666667
+    functionName: AnimEvent_AttackEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.93333334
-    functionName: OnAttackAnimComplete
+    functionName: AnimEvent_ClipEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

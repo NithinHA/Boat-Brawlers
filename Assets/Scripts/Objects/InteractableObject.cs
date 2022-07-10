@@ -34,9 +34,10 @@ namespace BaseObjects
                 return;
 
             // code to highlight the object
-            _highlightIndicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            _highlightIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube);
             _highlightIndicator.transform.SetParent(transform);
             _highlightIndicator.transform.localPosition = Vector3.zero;
+            _highlightIndicator.transform.rotation = Quaternion.identity;
             _highlightIndicator.GetComponent<Collider>().enabled = false;
 
             InteractablesController.Instance.HighlightedObject = this;

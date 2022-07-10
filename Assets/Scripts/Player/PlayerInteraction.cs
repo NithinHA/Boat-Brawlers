@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BaseObjects;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -69,7 +70,7 @@ namespace BaseObjects.Player
 
             item.transform.SetParent(null);
             ResetPivotAndHandPositions(_pivotMap[item.PivotType]);
-            m_Player.Rig.weight = 0;     // try Tweening this value
+            DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, 0, .01f);
             item.Drop();
             OnItemDropped?.Invoke(item);
         }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -8,19 +10,35 @@ namespace BaseObjects.Player
     public class PlayerAttack : MonoBehaviour
     {
         [SerializeField] private Player m_Player;
-        [Space]
-        [SerializeField] private float m_DefaultCooldownTime = .5f;
 
-        private float _timer = 0f;
+        [Header("Attack info")]
+        [SerializeField] private float m_DefaultAttackCooldownTime = .5f;
+        [SerializeField] private float[] m_AnimWeights;
+        [SerializeField] private float m_SimpleAttackDamage = 20f;
+
+        private float _attackCooldownTimer = 0f;
         private bool _canAttack = true;
         private Weapon _heldWeapon;
         public bool HasWeapon => _heldWeapon != null;
+        public float CurrentDamageAmount;
+
+        [Header("Hit info")]
+        [SerializeField] private float m_HitKnockbackForce = 400f;
+        [SerializeField] private float m_DefaultDamageCooldownTime = 4f;
+        [SerializeField] private GameObject[] m_DefaultHitboxes;
+
+        private float _damageCooldownTimer = 0f;
+        private List<GameObject> _playerHitboxes = new List<GameObject>();
+
         private float _cachedRigWeight;
 
-        private const int SimpleAttackTypes = 4;
+
+#region Unity callbacks
 
         private void Start()
         {
+            CurrentDamageAmount = m_SimpleAttackDamage;            // player starts barehanded
+
             m_Player.PlayerInteraction.OnItemPicked += OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped += OnItemDropped;
         }
@@ -33,21 +51,42 @@ namespace BaseObjects.Player
 
         private void Update()
         {
-            if (_timer > 0)
+            if (_attackCooldownTimer > 0)
             {
-                _timer -= Time.deltaTime;
-                return;
+                _attackCooldownTimer -= Time.deltaTime;
+            }
+
+            if (_damageCooldownTimer > 0)
+            {
+                _damageCooldownTimer -= Time.deltaTime;
             }
             
             if (Input.GetKeyDown(KeyCode.K))
-            {
                 Attack();
-                _timer = !HasWeapon ? m_DefaultCooldownTime : _heldWeapon.AttackCooldown;
+            else if (Input.GetKeyDown(KeyCode.O))
+                TakeDamage(transform.position + transform.forward);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag(Constants.Tags.ENEMY_ATTACK_HITBOX))
+            {
+                TakeDamage(other.ClosestPoint(transform.position));
+                // enemy.HitSuccess();
             }
         }
 
+#endregion
+
         public void Attack()
         {
+            if (_attackCooldownTimer > 0)
+            {
+                Debug.Log("=> wait for attack cooldown");
+                return;
+            }
+
+            _attackCooldownTimer = !HasWeapon ? m_DefaultAttackCooldownTime : _heldWeapon.AttackCooldown;
             _cachedRigWeight = m_Player.Rig.weight;
             m_Player.Rig.weight = 0;
             m_Player.PlayerInteraction.IsInteractionEnabled = false;
@@ -64,13 +103,15 @@ namespace BaseObjects.Player
 
         private void SimpleAttack()
         {
-            AnimateAttack(0, Random.Range(0, SimpleAttackTypes));
+            int index = Utilities.GetWeightedRandomIndex(m_AnimWeights);
+            AnimateAttack(0, index);
         }
 
         private void WeaponAttack()
         {
             _heldWeapon.Attack();
-            AnimateAttack((int) _heldWeapon.Type, Random.Range(0, _heldWeapon.AttackAnimVarities));
+            int index = _heldWeapon.GetClipIndex();
+            AnimateAttack((int) _heldWeapon.Type, index);
         }
 
         private void AnimateAttack(int weaponIndex, int attackIndex)
@@ -80,32 +121,109 @@ namespace BaseObjects.Player
             m_Player.Anim.SetTrigger(Constants.Animation.ATTACK);
         }
 
+        public void TakeDamage(Vector3 hitPoint)
+        {
+            if (_damageCooldownTimer > 0)
+            {
+                Debug.Log("=> Saved by damage cooldown");
+                return;
+            }
+
+            _damageCooldownTimer = m_DefaultDamageCooldownTime;
+            // play damage fx
+            // push back with physics.
+            // m_Player.Rb.AddForce(knockbackDirection * m_HitKnockbackForce);
+            m_Player.PlayerMovement.IsMovementEnabled = false;
+            m_Player.PlayerInteraction.IsInteractionEnabled = false;
+            m_Player.Rb.AddExplosionForce(m_HitKnockbackForce, hitPoint, 1f);
+            // play damage animation.
+            m_Player.Anim.SetTrigger(Constants.Animation.DAMAGE);
+        }
+
 
 #region Event lisetners
         
         private void OnItemPicked(InteractableObject obj)
         {
             _heldWeapon = obj as Weapon;
+            if (HasWeapon)
+                CurrentDamageAmount = _heldWeapon.Damage;
         }
 
         private void OnItemDropped(InteractableObject obj)
         {
             _heldWeapon = null;
+            CurrentDamageAmount = m_SimpleAttackDamage;
         }
 
-        public void OnAttackAnimDisableMovement()
+#endregion
+
+        
+#region Animation events
+
+        /// <summary>
+        /// Player attack anims
+        /// </summary>
+        public void AnimEvent_AttackBegin()
         {
             m_Player.PlayerMovement.IsMovementEnabled = false;
+            
+            // Activate PlayerAttackHitBoxes
+            _playerHitboxes.Clear();
+            if (HasWeapon)
+                _playerHitboxes.Add(_heldWeapon.Hitbox);
+            else
+                for (int i = 0; i < m_DefaultHitboxes.Length; i++)
+                    _playerHitboxes.Add(m_DefaultHitboxes[i]);
+
+            for (int i = 0; i < _playerHitboxes.Count; i++)
+                _playerHitboxes[i].SetActive(true);
         }
-        
-        public void OnAttackAnimComplete()
+
+        public void AnimEvent_AttackEnd()
+        {
+            // Deactivate PlayerAttackHitBoxes
+            for (int i = 0; i < _playerHitboxes.Count; i++)
+                _playerHitboxes[i].SetActive(false);
+            
+            _playerHitboxes.Clear();
+        }
+
+        public void AnimEvent_ClipEnd()
         {
             DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, _cachedRigWeight, .01f);
             m_Player.PlayerMovement.IsMovementEnabled = true;
             m_Player.PlayerInteraction.IsInteractionEnabled = true;
-            _timer = .1f;
+            _attackCooldownTimer = .1f;
+        }
+
+        /// <summary>
+        /// Knockback anims
+        /// </summary>
+        public void AnimEvent_KnockbackBegin()
+        {
+            for (int i = 0; i < _playerHitboxes.Count; i++)
+                _playerHitboxes[i].SetActive(false);
+            
+            m_Player.PlayerMovement.IsMovementEnabled = false;
+            
+            m_Player.PlayerInteraction.IsInteractionEnabled = true;
+            m_Player.PlayerInteraction.DropItem();              // Instantaneously allow player to Drop the item and disable PlayerInteractions.
+            m_Player.PlayerInteraction.IsInteractionEnabled = false;
+        }
+
+        public void AnimEvent_KnockbackGroundImpact()
+        {
+            // play dust particles
+        }
+
+        public void AnimEvent_KnockbackEnd()
+        {
+            m_Player.PlayerMovement.IsMovementEnabled = true;
+            m_Player.PlayerInteraction.IsInteractionEnabled = true;
         }
 
 #endregion
+
     }
 }

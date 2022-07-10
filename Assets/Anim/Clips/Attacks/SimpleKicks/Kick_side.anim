@@ -40823,15 +40823,22 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.23333333
-    functionName: OnAttackAnimDisableMovement
+  - time: 0.2
+    functionName: AnimEvent_AttackBegin
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.46666667
+    functionName: AnimEvent_AttackEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.7
-    functionName: OnAttackAnimComplete
+    functionName: AnimEvent_ClipEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -616,7 +616,7 @@ GameObject:
   - component: {fileID: 1174313492}
   m_Layer: 0
   m_Name: Walls
-  m_TagString: Untagged
+  m_TagString: Raft
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -851,7 +851,7 @@ GameObject:
   - component: {fileID: 1810058790}
   m_Layer: 0
   m_Name: ArgonRaft
-  m_TagString: Untagged
+  m_TagString: Raft
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1049,7 +1049,7 @@ GameObject:
   - component: {fileID: 919132148131193898}
   m_Layer: 8
   m_Name: model
-  m_TagString: Untagged
+  m_TagString: Raft
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1399,7 +1399,7 @@ PrefabInstance:
     - target: {fileID: 6986476149079779356, guid: f518ef131872340848257fc49b335e1a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.23000002
+      value: 0.306
       objectReference: {fileID: 0}
     - target: {fileID: 6986476149079779356, guid: f518ef131872340848257fc49b335e1a,
         type: 3}
