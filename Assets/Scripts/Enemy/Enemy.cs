@@ -1,24 +1,43 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using BaseObjects.Player;
+using DG.Tweening;
 using UnityEngine;
+using BaseObjects.Player;
+using Unity.Mathematics;
 
 namespace BaseObjects.Enemy
 {
     public class Enemy : BaseObject
     {
+        [Header("Locomotion info")]
+        [SerializeField] private float m_NextLeapWaitTime = 5f;
+        [SerializeField] private float m_LeapMagnitude = 2f;
         [Header("Health info")]
         [SerializeField] private float m_MaxHealth = 100f;
-        [SerializeField] private GameObject m_EnemyHitbox;
-        [SerializeField] private float m_HitKnockbackForce = 500f;
+
         [Header("Refs")]
-        [SerializeField] protected Animator Anim;
-        [SerializeField] protected Rigidbody Rb;
+        [SerializeField] private GameObject m_ChargingParticlesPrefab;
+        [SerializeField] private GameObject m_DeathParticlesPrefab;         // make sure auto destroy is enabled for this
+        [Space]
+        [SerializeField] internal Animator Anim;
+        [SerializeField] internal Rigidbody Rb;
+        [SerializeField] private EnemyAttack m_EnemyAttack;
+        [Space]
 
         public float Health;
-        private bool _isLanded = false;
-        private bool _attackInProgress = false;
+        public bool IsLanded = false;
+        
+        private float _leapTimer;
+        private Sequence _chargingSequence = null;
+        private GameObject _chargingParticles;
+
+        public enum EnemyState
+        {
+            Idle, Charging, Attack
+        }
+        public EnemyState CurrentState;
+        public Action OnStateChange;
 
 #region Unity callbacks
 
@@ -26,20 +45,10 @@ namespace BaseObjects.Enemy
         {
             Health = m_MaxHealth;
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.B))
-                Landed();
-            else if (Input.GetKeyDown(KeyCode.N))
-                Attack();
-            else if (Input.GetKeyDown(KeyCode.M))
-                TakeDamage(1, transform.position + transform.forward);
-        }
-
+        
         private void OnCollisionEnter(Collision collision)
         {
-            if (!_isLanded)
+            if (!IsLanded)
             {
                 if (collision.gameObject.CompareTag(Constants.Tags.RAFT))
                     Landed();
@@ -48,81 +57,139 @@ namespace BaseObjects.Enemy
             }
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void Update()
         {
-            if (other.CompareTag(Constants.Tags.PLAYER_ATTACK_HITBOX))
+            if (!IsLanded)
             {
-                PlayerAttack playerAttack = other.gameObject.GetComponentInParent<PlayerAttack>();
-                TakeDamage(playerAttack.CurrentDamageAmount, other.ClosestPoint(transform.position));
+                return;
+            }
+            
+#if UNITY_EDITOR
+            KeyboardShortcuts();
+#endif
+
+            if (transform.position.y < -5f)
+            {
+                KillEnemy();
+            }
+
+            switch (CurrentState)
+            {
+                case EnemyState.Idle:
+                    if (_leapTimer > 0)
+                    {
+                        _leapTimer -= Time.deltaTime;
+                        return;
+                    }
+
+                    ChangeState(EnemyState.Charging);
+                    
+                    Quaternion lookRotation = GetRotationToPlayer();
+                    _chargingSequence = DOTween.Sequence();
+                    _chargingSequence.Append(transform.DORotateQuaternion(lookRotation, .8f))
+                        .AppendCallback(() =>
+                        {
+                            _chargingParticles = Instantiate(m_ChargingParticlesPrefab, transform.position, Quaternion.identity);   // create charging particles
+                        })
+                        .AppendInterval(.5f)
+                        .AppendCallback(() =>
+                        {
+                            if (_chargingParticles != null)
+                            {
+                                Destroy(_chargingParticles);
+                                _chargingParticles = null;
+                            }
+                        })
+                        .AppendCallback(Attack);
+                    break;
             }
         }
 
+        private void KeyboardShortcuts()
+        {
+            if (Input.GetKeyDown(KeyCode.B))
+                Landed();
+            else if (Input.GetKeyDown(KeyCode.N))
+                Attack();
+            else if (Input.GetKeyDown(KeyCode.M))
+                m_EnemyAttack.TakeDamage(1, (transform.position - Player.Player.Instance.transform.position).normalized);
+        } 
+
 #endregion
 
+        public void ChangeState(EnemyState newState)
+        {
+            CurrentState = newState;
+            OnStateChange?.Invoke();
+        }
+        
         private void Landed()
         {
-            _isLanded = true;
+            IsLanded = true;
             Anim.SetTrigger(Constants.Animation.LANDED);
+            _leapTimer = m_NextLeapWaitTime;
             base.Start();
         }
 
         private void Attack()
         {
+            ChangeState(EnemyState.Attack);
             Anim.SetTrigger(Constants.Animation.ATTACK);
+            Rb.AddForce(transform.forward * m_LeapMagnitude, ForceMode.Impulse);
+            m_EnemyAttack.Attack(() =>
+            {
+                _leapTimer = m_NextLeapWaitTime;
+                ChangeState(EnemyState.Idle);
+                Rb.velocity = Vector3.zero;
+            });
         }
 
-        public void TakeDamage(float amount, Vector3 hitPoint)
+        internal void OnTakeDamage(float amount)
         {
-            Anim.SetTrigger(Constants.Animation.DAMAGE);
-            // push back
-            Rb.AddExplosionForce(amount * m_HitKnockbackForce, hitPoint, 1f);
-
             Health -= amount;
-            CheckDeath();
-        }
-
-        private void CheckDeath()
-        {
+            if (Health <= 0)
+            {
+                KillEnemy();
+                return;
+            }
             
+            _leapTimer = m_NextLeapWaitTime;
+            Anim.SetTrigger(Constants.Animation.DAMAGE);
+
+            if(CurrentState == EnemyState.Charging)
+                ResetFailedAttack();
         }
 
         private void KillEnemy()
         {
+            if (CurrentState == EnemyState.Charging)
+                ResetFailedAttack();
+
+            Instantiate(m_DeathParticlesPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
             
         }
 
-        public void EnemyOverboard()
+        private void ResetFailedAttack()
         {
-            
+            if (_chargingSequence != null)
+                _chargingSequence.Kill();
+
+            if (_chargingParticles != null)
+            {
+                Destroy(_chargingParticles);
+                _chargingParticles = null;
+            }
+            ChangeState(EnemyState.Idle);
         }
 
-
-#region Animation events
-
-        public virtual void AnimEvent_AttackBegin()
+        private Quaternion GetRotationToPlayer()
         {
-            _attackInProgress = true;
-            m_EnemyHitbox.SetActive(true);
+            Vector3 playerDir = Player.Player.Instance.transform.position - transform.position;
+            playerDir.y = 0;
+            playerDir.Normalize();
+            return Quaternion.LookRotation(playerDir);
         }
-
-        public virtual void AnimEvent_AttackEnd()
-        {
-            _attackInProgress = false;
-            m_EnemyHitbox.SetActive(false);
-        }
-
-        public void AnimEvent_KnockbackGroundImpact()
-        {
-            // play dust particles
-        }
-
-        public void AnimEvent_KnockbackEnd()
-        {
-            if (_attackInProgress)
-                m_EnemyHitbox.SetActive(false);
-        }
-
-#endregion
 
     }
 }

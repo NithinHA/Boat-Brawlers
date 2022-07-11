@@ -1405,7 +1405,7 @@ GameObject:
   - component: {fileID: 6986476149079779354}
   - component: {fileID: 6986476149079779355}
   - component: {fileID: 6986476150293269549}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bagpack
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -79,6 +79,16 @@ public class RaftController : Singleton<RaftController>
         }
     }
 
+    public void AddInstantaneousForce(Vector3 itemPos, float weight)
+    {
+        Vector3 force = (itemPos - m_Pivot.position) * weight;
+        force.y = 0;
+        Vector3 rotationVector = new Vector3(force.z, 0, -force.x);
+        rotationVector = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.down) * rotationVector;
+        m_Rb.rotation = Quaternion.Euler(m_Rb.rotation.eulerAngles + rotationVector * m_WeightMultiplier * Time.deltaTime);
+
+    }
+
 #region Event listeners
 
     private void OnObjectAdded(BaseObject item)
@@ -99,9 +109,5 @@ public class RaftController : Singleton<RaftController>
         Gizmos.DrawSphere(m_Pivot.position, .1f);
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(_resultant, .1f);
-        
-        // Gizmos.color = Color.magenta;
-        // Gizmos.DrawSphere(rotationMag, .1f);
-        // Gizmos.DrawLine(m_Pivot.position, resultant);
     }
 }
