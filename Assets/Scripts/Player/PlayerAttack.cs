@@ -25,6 +25,7 @@ namespace BaseObjects.Player
         [Header("Damage info")]
         [SerializeField] private float m_HitKnockbackForce = 400f;
         [SerializeField] private float m_DefaultDamageCooldownTime = 4f;
+        [SerializeField] private GameObject m_GroundImpactParticles;
 
         private float _damageCooldownTimer = 0f;
 
@@ -215,7 +216,10 @@ namespace BaseObjects.Player
         public void AnimEvent_KnockbackGroundImpact()
         {
             ResetCurrentHitboxes();         // as a safety measure. Sometimes hitboxes will be enabled even after attack fails and knockback occurs.
-            // play dust particles
+            
+            Instantiate(m_GroundImpactParticles, transform.position, Quaternion.identity);
+            // play sfx
+            // camera shake
             
             m_Player.PlayerInteraction.IsInteractionEnabled = true;
             m_Player.PlayerInteraction.DropItem();              // Instantaneously allow player to Drop the item and disable PlayerInteractions.

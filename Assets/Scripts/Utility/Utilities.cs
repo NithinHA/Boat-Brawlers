@@ -9,6 +9,10 @@ public class Utilities
     public static int GetWeightedRandomIndex(float[] weights)
     {
         float weightSum = weights.Sum();
+
+        if (weightSum == 0)
+            return Random.Range(0, weights.Length);
+
         int index = 0;
         int lastIndex = weights.Length - 1;
         while (index < lastIndex)

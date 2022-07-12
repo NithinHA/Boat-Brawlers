@@ -13,8 +13,10 @@ namespace BaseObjects.Enemy
         [Header("Locomotion info")]
         [SerializeField] private float m_NextLeapWaitTime = 5f;
         [SerializeField] private float m_LeapMagnitude = 2f;
+        [SerializeField] private float m_DirectTowardsPlayerDelay = .5f;
         [Header("Health info")]
         [SerializeField] private float m_MaxHealth = 100f;
+        [SerializeField] private float m_FailedToLandDestroyTimer = 4f;
 
         [Header("Refs")]
         [SerializeField] private GameObject m_ChargingParticlesPrefab;
@@ -31,6 +33,7 @@ namespace BaseObjects.Enemy
         private float _leapTimer;
         private Sequence _chargingSequence = null;
         private GameObject _chargingParticles;
+        private float _timeSinceSpawn;
 
         public enum EnemyState
         {
@@ -38,6 +41,7 @@ namespace BaseObjects.Enemy
         }
         public EnemyState CurrentState;
         public Action OnStateChange;
+        public static Action<Enemy> OnEnemyDestroyed;
 
 #region Unity callbacks
 
@@ -45,7 +49,13 @@ namespace BaseObjects.Enemy
         {
             Health = m_MaxHealth;
         }
-        
+
+        protected override void OnDestroy()
+        {
+            OnEnemyDestroyed?.Invoke(this);
+            base.OnDestroy();
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (!IsLanded)
@@ -61,6 +71,7 @@ namespace BaseObjects.Enemy
         {
             if (!IsLanded)
             {
+                HandlePreLanding();
                 return;
             }
             
@@ -86,11 +97,8 @@ namespace BaseObjects.Enemy
                     
                     Quaternion lookRotation = GetRotationToPlayer();
                     _chargingSequence = DOTween.Sequence();
-                    _chargingSequence.Append(transform.DORotateQuaternion(lookRotation, .8f))
-                        .AppendCallback(() =>
-                        {
-                            _chargingParticles = Instantiate(m_ChargingParticlesPrefab, transform.position, Quaternion.identity);   // create charging particles
-                        })
+                    _chargingParticles = Instantiate(m_ChargingParticlesPrefab, transform.position, Quaternion.identity);   // create charging particles
+                    _chargingSequence.Append(transform.DORotateQuaternion(lookRotation, m_DirectTowardsPlayerDelay))
                         .AppendInterval(.5f)
                         .AppendCallback(() =>
                         {
@@ -129,6 +137,9 @@ namespace BaseObjects.Enemy
             Anim.SetTrigger(Constants.Animation.LANDED);
             _leapTimer = m_NextLeapWaitTime;
             base.Start();
+            
+            // play sfx
+            // play particles
         }
 
         private void Attack()
@@ -167,7 +178,14 @@ namespace BaseObjects.Enemy
 
             Instantiate(m_DeathParticlesPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
-            
+        }
+
+        private void HandlePreLanding()
+        {
+            if (_timeSinceSpawn < m_FailedToLandDestroyTimer)
+                _timeSinceSpawn += Time.deltaTime;
+            else
+                KillEnemy();
         }
 
         private void ResetFailedAttack()

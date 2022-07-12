@@ -588,9 +588,9 @@ GameObject:
   - component: {fileID: 1686550858226959278}
   - component: {fileID: 765545412}
   - component: {fileID: 2210746431769172082}
+  - component: {fileID: 2092589426}
   - component: {fileID: 4641553347828722631}
   - component: {fileID: 765545411}
-  - component: {fileID: 2092589426}
   - component: {fileID: 1904739267}
   m_Layer: 6
   m_Name: DoraCharacter
@@ -669,6 +669,22 @@ CapsuleCollider:
   m_Height: 1.15
   m_Direction: 1
   m_Center: {x: 0, y: 0.58, z: 0}
+--- !u!114 &2092589426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686550858226959265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RigLayers:
+  - m_Rig: {fileID: 1758320533}
+    m_Active: 1
+  m_Effectors: []
 --- !u!114 &4641553347828722631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,22 +724,6 @@ MonoBehaviour:
   m_AimAlwaysForward: 1
   _curSpeed: 0
   IsMovementEnabled: 1
---- !u!114 &2092589426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686550858226959265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RigLayers:
-  - m_Rig: {fileID: 1758320533}
-    m_Active: 1
-  m_Effectors: []
 --- !u!114 &1904739267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,11 +738,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Player: {fileID: 4641553347828722631}
   m_DefaultAttackCooldownTime: 0.5
-  m_AnimWeights:
-  - 2
-  - 2
-  - 1
-  - 1
   m_AnimWeightHitboxMap:
   - ClipName: Kick_1
     Weight: 2
@@ -769,12 +764,11 @@ MonoBehaviour:
       - {fileID: 6172691433775294609}
       Radius: 0.8
   m_SimpleAttackDamage: 20
-  m_DefaultHitboxes:
-  - {fileID: 5770287155136515427}
-  - {fileID: 5733736489431305265}
   CurrentDamageAmount: 0
   m_HitKnockbackForce: 200
   m_DefaultDamageCooldownTime: 4
+  m_GroundImpactParticles: {fileID: 6631908133778494888, guid: 3f7185f4d842044179026be06ff2adb8,
+    type: 3}
 --- !u!1 &1853687250398477494
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,8 +11,8 @@ namespace BaseObjects.Enemy
         [SerializeField] private Enemy m_Enemy;
         [SerializeField] private GameObject m_EnemyHitbox;
         [SerializeField] private float m_HitKnockbackForce = 20f;
+        [SerializeField] private GameObject m_GroundImpactParticles;
 
-        private bool _isLanded = false;
         private Action _onAttackAnimComplete;
 
 #region Unity callbacks
@@ -41,6 +41,9 @@ namespace BaseObjects.Enemy
         {
             // push back
             m_Enemy.Rb.AddForce(knockbackDirection * amount * m_HitKnockbackForce);
+            // camera shake
+            // play particles
+            // play sfx
             if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)
             {
                 if(m_EnemyHitbox.activeSelf)
@@ -74,7 +77,8 @@ namespace BaseObjects.Enemy
 
         public void AnimEvent_KnockbackGroundImpact()
         {
-            // play dust particles
+            // play particles
+            // play sfx
         }
 
         public void AnimEvent_KnockbackEnd()

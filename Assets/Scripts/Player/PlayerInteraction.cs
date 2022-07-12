@@ -68,7 +68,7 @@ namespace BaseObjects.Player
             if (item == null)
                 return;
 
-            item.transform.SetParent(null);
+            item.transform.SetParent(InteractablesController.Instance.Container);
             ResetPivotAndHandPositions(_pivotMap[item.PivotType]);
             DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, 0, .01f);
             item.Drop();
