@@ -479,7 +479,6 @@ GameObject:
   - component: {fileID: 8837188091151350917}
   - component: {fileID: 8837188091151350918}
   - component: {fileID: 8837188091151350913}
-  - component: {fileID: 8837188091151350912}
   m_Layer: 0
   m_Name: Walls
   m_TagString: Raft
@@ -528,19 +527,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.1318288, y: 0.6308799, z: 2.6874046}
   m_Center: {x: -3.480273, y: -0.09227991, z: 0.065914154}
---- !u!65 &8837188091151350912
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8837188091151350938}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.42364526, y: 3.6687698, z: 3.938569}
-  m_Center: {x: 3.370419, y: 4.1660385, z: 0}
 --- !u!1 &8837188091589339313
 GameObject:
   m_ObjectHideFlags: 0

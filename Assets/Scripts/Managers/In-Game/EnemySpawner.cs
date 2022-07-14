@@ -15,6 +15,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
     private float[] _spawnPointWeights;
 
     public List<Enemy> EnemiesSpawned = new List<Enemy>();
+    public Action OnAllEnemiesKilled;
 
 #region Unity callbacks
 
@@ -96,6 +97,9 @@ public class EnemySpawner : Singleton<EnemySpawner>
     private void OnEnemyDestroyed(Enemy enemy)
     {
         EnemiesSpawned.Remove(enemy);
+
+        if (EnemiesSpawned.Count == 0)
+            OnAllEnemiesKilled?.Invoke();
     }
 
 #endregion

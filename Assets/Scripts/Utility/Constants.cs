@@ -32,4 +32,9 @@ public class Constants
         public const string PLAYER_ATTACK_HITBOX = "PlayerAttackHitbox";
         public const string ENEMY_ATTACK_HITBOX = "EnemyAttackHitbox";
     }
+
+    public class SceneNames
+    {
+        public const string MainMenu = "MainMenu";
+    }
 }

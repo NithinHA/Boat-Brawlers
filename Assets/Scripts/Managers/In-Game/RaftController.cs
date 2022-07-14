@@ -38,6 +38,9 @@ public class RaftController : Singleton<RaftController>
 
     private void Update()
     {
+        if (LevelManager.Instance.IsGameEnded)
+            return;
+
         ComputeResultantForce();
         PerformTilting();
         CheckForGameOver();
@@ -74,6 +77,7 @@ public class RaftController : Singleton<RaftController>
         {
             m_Rb.isKinematic = false;
             Debug.LogError("DIEDED! (" + localRot + ")");
+            LevelManager.Instance.GameLost();
             // Disable player control
             // End game
         }
