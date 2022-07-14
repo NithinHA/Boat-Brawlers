@@ -932,6 +932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1213813431}
   - component: {fileID: 1213813432}
+  - component: {fileID: 1213813433}
   m_Layer: 5
   m_Name: ProgressBar
   m_TagString: Untagged
@@ -985,6 +986,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1213813433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213813430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5652227f08ddd4202add96633f5c48b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ProgressItemPrefab: {fileID: -6856826006940827485, guid: 3db4d13b7c70543c09c2429aed9bcbcc,
+    type: 3}
 --- !u!1 &1313155224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1347,6 +1362,7 @@ MonoBehaviour:
     PreWaveEnemyCount: 4
     WaveEnemyCount: 5
     AvgTimeBetweenEnemySpawns: 2
+  CurrentWaveIndex: -1
 --- !u!4 &1538678152
 Transform:
   m_ObjectHideFlags: 0
@@ -1387,8 +1403,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1593703588}
   - component: {fileID: 1593703591}
+  - component: {fileID: 1593703592}
   - component: {fileID: 1593703590}
   - component: {fileID: 1593703589}
+  - component: {fileID: 1593703593}
   m_Layer: 5
   m_Name: GameWinPanel
   m_TagString: Untagged
@@ -1469,6 +1487,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1593703587}
   m_CullTransparentMesh: 1
+--- !u!223 &1593703592
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593703587}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 5
+  m_TargetDisplay: 0
+--- !u!114 &1593703593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593703587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1758000070
 GameObject:
   m_ObjectHideFlags: 0
@@ -2122,8 +2178,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1091240571907231753}
   - component: {fileID: 2466899918435374950}
+  - component: {fileID: 7049306721229247723}
   - component: {fileID: 4355208299597392127}
   - component: {fileID: 7049306721229247722}
+  - component: {fileID: 7049306721229247724}
   m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
@@ -2621,6 +2679,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd86e2640f474b268b81e6229cd9d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!223 &7049306721229247723
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367345134516367361}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 5
+  m_TargetDisplay: 0
+--- !u!114 &7049306721229247724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367345134516367361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!224 &7083930911267325964
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2947,8 +3043,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8622378415118572707}
   - component: {fileID: 8622378415118572704}
+  - component: {fileID: 8622378415118572709}
   - component: {fileID: 8622378415118572705}
   - component: {fileID: 8622378415118572706}
+  - component: {fileID: 8622378415118572710}
   m_Layer: 5
   m_Name: PauseGamePanel
   m_TagString: Untagged
@@ -2956,6 +3054,44 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!223 &8622378415118572709
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622378415118572708}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 5
+  m_TargetDisplay: 0
+--- !u!114 &8622378415118572710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622378415118572708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!222 &8622378415220335162
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4071,8 +4207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c20f8dc526a7435dbfd244395b5c7cbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ProgressBar: {fileID: 0}
-  m_WaveIndicator: []
+  m_ProgressBar: {fileID: 1213813433}
   m_WaveInfoRect: {fileID: 1945235981}
   m_WaveInfoText: {fileID: 702161697}
   m_WaveMessages:
@@ -4268,11 +4403,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ArgonRaft
-      objectReference: {fileID: 0}
-    - target: {fileID: 8837188091589339315, guid: 2f9fc372e47b2406aa431f66116421ac,
-        type: 3}
-      propertyPath: m_WeightMultiplier
-      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f9fc372e47b2406aa431f66116421ac, type: 3}

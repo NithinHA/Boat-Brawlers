@@ -43,6 +43,7 @@ public class RaftController : Singleton<RaftController>
 
         ComputeResultantForce();
         PerformTilting();
+        // m_Rb.AddForceAtPosition(Vector3.right, _resultant * m_WeightMultiplier);
         CheckForGameOver();
     }
 
@@ -76,7 +77,7 @@ public class RaftController : Singleton<RaftController>
         if ((localRot.x > m_TumbleThreshold.x && localRot.x < m_TumbleThreshold.y) || (localRot.z > m_TumbleThreshold.x && localRot.z < m_TumbleThreshold.y))
         {
             m_Rb.isKinematic = false;
-            Debug.LogError("DIEDED! (" + localRot + ")");
+            Debug.Log("DIEDED! (" + localRot + ")");
             LevelManager.Instance.GameLost();
             // Disable player control
             // End game
@@ -84,13 +85,15 @@ public class RaftController : Singleton<RaftController>
     }
 
     public void AddInstantaneousForce(Vector3 itemPos, float weight)
-    {
+    { 
         Vector3 force = (itemPos - m_Pivot.position) * weight;
-        force.y = 0;
-        Vector3 rotationVector = new Vector3(force.z, 0, -force.x);
-        rotationVector = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.down) * rotationVector;
-        m_Rb.rotation = Quaternion.Euler(m_Rb.rotation.eulerAngles + rotationVector * m_WeightMultiplier * Time.deltaTime);
+        // force.y = 0;
+        // Vector3 rotationVector = new Vector3(force.z, 0, -force.x);
+        // rotationVector = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.down) * rotationVector;
+        // m_Rb.rotation = Quaternion.Euler(m_Rb.rotation.eulerAngles + rotationVector * m_WeightMultiplier * Time.deltaTime);
 
+        Vector3 torqueAxis = Vector3.Cross(force.normalized, Vector3.up);
+        m_Rb.AddTorque(torqueAxis * force.magnitude * m_WeightMultiplier);
     }
 
 #region Event listeners

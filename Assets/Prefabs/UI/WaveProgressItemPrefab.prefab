@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 8705939794334335078}
   - component: {fileID: 1314024335481133079}
   - component: {fileID: 4253226012964697840}
+  - component: {fileID: -6856826006940827485}
   m_Layer: 5
-  m_Name: WaveProgressPrefab
+  m_Name: WaveProgressItemPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,6 +79,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-6856826006940827485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342106526672108041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f418b11066ba41d1a75fd8b025633ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FillImage: {fileID: 4253226012964697840}
+  Target: 0
+  m_WaveIndicatorBg: {fileID: 7026958612424848718}
+  m_WaveIndicator: {fileID: 6701812690620493715}
+  m_WaveIncompleteColor: {r: 0.85882354, g: 0.78039217, b: 0.48235294, a: 1}
+  m_WaveCompleteColor: {r: 0.6901961, g: 0.27058825, b: 0.27058825, a: 1}
 --- !u!1 &4049830641646702994
 GameObject:
   m_ObjectHideFlags: 0

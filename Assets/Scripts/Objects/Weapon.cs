@@ -11,6 +11,7 @@ namespace BaseObjects
         public float Damage = 40f;
         public WeaponType Type;
         [SerializeField] private AnimWeightHitboxMap[] m_AnimWeightHitboxMap;
+        [SerializeField] private int m_HeavyAttackIndex = 0;
 
         private float[] _animWeights;
 
@@ -27,7 +28,8 @@ namespace BaseObjects
 
         public void Attack(int index)
         {
-            RaftController.Instance.AddInstantaneousForce(transform.position, _instantaneousAttackWeight);
+            if(index == m_HeavyAttackIndex)
+                RaftController.Instance.AddInstantaneousForce(transform.position, _instantaneousAttackWeight);
         }
 
         public int GetClipIndex()

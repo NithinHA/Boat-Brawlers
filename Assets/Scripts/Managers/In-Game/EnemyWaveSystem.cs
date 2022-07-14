@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyWaveSystem : Singleton<EnemyWaveSystem>
 {
     public WaveInfo[] Waves;
-    private int _currentWaveIndex = -1;
+    [HideInInspector] public int CurrentWaveIndex = -1;
 
     // waiting state parameters
     private float _timeSinceLastWave = 0;
@@ -62,10 +62,11 @@ public class EnemyWaveSystem : Singleton<EnemyWaveSystem>
         switch (_currentState)
         {
             case WaveState.Waiting:
-                if (_timeSinceLastWave < Waves[_currentWaveIndex].TimeBeforeWaveBegin)
+                if (_timeSinceLastWave < Waves[CurrentWaveIndex].TimeBeforeWaveBegin)
                 {
                     _timeSinceLastWave += Time.deltaTime;
                     // update the progress bar UI
+                    InGameUI.Instance.InGameScreen.UpdateProgressBar(_timeSinceLastWave);
                     
                     if (_timeSinceLastSpawn < _waitingStateSpawnDelay)
                     {
@@ -87,7 +88,7 @@ public class EnemyWaveSystem : Singleton<EnemyWaveSystem>
                 break;
             case WaveState.Spawning:
 
-                if (_timeSinceLastSpawn < Waves[_currentWaveIndex].AvgTimeBetweenEnemySpawns)
+                if (_timeSinceLastSpawn < Waves[CurrentWaveIndex].AvgTimeBetweenEnemySpawns)
                 {
                     _timeSinceLastSpawn += Time.deltaTime;
                 }
@@ -114,7 +115,7 @@ public class EnemyWaveSystem : Singleton<EnemyWaveSystem>
 
     private void ComputeWaveInfo()
     {
-        WaveInfo currentWave = Waves[_currentWaveIndex];
+        WaveInfo currentWave = Waves[CurrentWaveIndex];
         _waitingStateSpawnDelay = currentWave.TimeBeforeWaveBegin / (currentWave.PreWaveEnemyCount + 1);
     }
 
@@ -133,9 +134,11 @@ public class EnemyWaveSystem : Singleton<EnemyWaveSystem>
             return;
 
         // if UI wave indicator is blinking, stop it.
-        
-        _currentWaveIndex++;
-        if(_currentWaveIndex < Waves.Length)
+        if (CurrentWaveIndex >= 0)
+            InGameUI.Instance.InGameScreen.ToggleBlinkWaveIndicator(false);
+
+        CurrentWaveIndex++;
+        if(CurrentWaveIndex < Waves.Length)
             ComputeWaveInfo();
         else
         {
@@ -149,13 +152,12 @@ public class EnemyWaveSystem : Singleton<EnemyWaveSystem>
         if (newState != WaveState.Spawning)
             return;
 
-        // Display message on UI: "Huge Wave Incoming!"
-        Debug.Log("Huge wave incoming");
-        InGameUI.Instance.InGameScreen.DisplayWaveInfo(_currentWaveIndex);
         // blink the progress bar wave icon indicating wave in-progress state.
+        InGameUI.Instance.InGameScreen.ToggleBlinkWaveIndicator(true);
+        InGameUI.Instance.InGameScreen.DisplayWaveInfo(CurrentWaveIndex);
 
-        _timeSinceLastSpawn = Waves[_currentWaveIndex].AvgTimeBetweenEnemySpawns;
-        _currentWaveMaxEnemyCount = Waves[_currentWaveIndex].WaveEnemyCount;
+        _timeSinceLastSpawn = Waves[CurrentWaveIndex].AvgTimeBetweenEnemySpawns;
+        _currentWaveMaxEnemyCount = Waves[CurrentWaveIndex].WaveEnemyCount;
         _currentWaveEnemySpawnCount = 0;
     }
 

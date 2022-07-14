@@ -2,39 +2,34 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using UI.ProgressBar;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI
+namespace UI.Screens
 {
     public class InGameScreen : BaseScreen
     {
-        [SerializeField] private Slider m_ProgressBar;
-        [SerializeField] private Image[] m_WaveIndicator;
+        [SerializeField] private WavesSystemProgressBar m_ProgressBar;
         [Space]
         [SerializeField] private RectTransform m_WaveInfoRect;
         [SerializeField] private TextMeshProUGUI m_WaveInfoText;
         [SerializeField] private string[] m_WaveMessages;
 
-        private readonly Vector3 _centerPos = Vector3.zero;
-        private readonly Vector3 _downPos = new Vector3(-Screen.height, 0, 0);
-        private readonly Vector3 _topPos = new Vector3(Screen.height, 0, 0);
-
-        private void Update()
+        private void Start()
         {
-            if(Input.GetKeyDown(KeyCode.Y))
-                DisplayWaveInfo(0);
+            m_ProgressBar.CreateProgressBar();
         }
 
-        public void UpdateProgressBar()
+        public void UpdateProgressBar(float timeSinceLastWave)
         {
-            
+            m_ProgressBar.SetProgress(timeSinceLastWave);
         }
 
-        public void ToggleBlinkWaveIndicator(int waveIndex, bool active)
+        public void ToggleBlinkWaveIndicator(bool active)
         {
-            
+            m_ProgressBar.ToggleWaveBlinkIndicator(active);
         }
         
         public void DisplayWaveInfo(int waveIndex)

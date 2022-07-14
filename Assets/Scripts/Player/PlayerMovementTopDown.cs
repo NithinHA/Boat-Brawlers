@@ -32,12 +32,14 @@ namespace BaseObjects.Player
 
             m_Player.PlayerInteraction.OnItemPicked += OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped += OnItemDropped;
+            LevelManager.Instance.OnGameEnd += OnGameEnd;
         }
 
         private void OnDestroy()
         {
             m_Player.PlayerInteraction.OnItemPicked -= OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped -= OnItemDropped;
+            LevelManager.Instance.OnGameEnd -= OnGameEnd;
         }
 
         private void Update()
@@ -120,6 +122,11 @@ namespace BaseObjects.Player
         private void OnItemDropped(InteractableObject item)
         {
             _curSpeed = m_MaxSpeed;
+        }
+
+        private void OnGameEnd(bool isWin)
+        {
+            IsMovementEnabled = false;
         }
 
 #endregion

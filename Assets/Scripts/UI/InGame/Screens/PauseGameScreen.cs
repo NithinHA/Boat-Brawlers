@@ -5,7 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UI
+namespace UI.Screens
 {
     public class PauseGameScreen : BaseScreen
     {
