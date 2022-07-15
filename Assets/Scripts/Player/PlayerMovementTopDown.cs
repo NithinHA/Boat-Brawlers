@@ -11,6 +11,7 @@ namespace BaseObjects.Player
         [Space]
         [SerializeField] private float m_MaxSpeed = 5f;
         [SerializeField] private LayerMask m_AimLayerMask;
+        [SerializeField] private FloatingJoystick m_FloatingJoystick;
 
         [Header("AB test")]
         [SerializeField] private bool m_AimAlwaysForward = true;
@@ -39,7 +40,8 @@ namespace BaseObjects.Player
         {
             m_Player.PlayerInteraction.OnItemPicked -= OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped -= OnItemDropped;
-            LevelManager.Instance.OnGameEnd -= OnGameEnd;
+            if(LevelManager.Instance != null)
+                LevelManager.Instance.OnGameEnd -= OnGameEnd;
         }
 
         private void Update()
@@ -52,8 +54,13 @@ namespace BaseObjects.Player
             else
                 AimTowardsMouse();
         
+#if UNITY_EDITOR
             float playerInputX = Input.GetAxis("Horizontal");
             float playerInputY = Input.GetAxis("Vertical");
+#else
+            float playerInputX = m_FloatingJoystick.Horizontal;
+            float playerInputY = m_FloatingJoystick.Vertical;
+#endif
 
             // bool didDive = Input.GetKeyDown(KeyCode.LeftControl);
             // if (didDive && !m_Player.Anim.GetCurrentAnimatorStateInfo(0).IsName(Constants.Animation.DIVE))

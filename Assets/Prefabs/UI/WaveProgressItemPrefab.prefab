@@ -95,8 +95,8 @@ MonoBehaviour:
   Target: 0
   m_WaveIndicatorBg: {fileID: 7026958612424848718}
   m_WaveIndicator: {fileID: 6701812690620493715}
-  m_WaveIncompleteColor: {r: 0.85882354, g: 0.78039217, b: 0.48235294, a: 1}
-  m_WaveCompleteColor: {r: 0.6901961, g: 0.27058825, b: 0.27058825, a: 1}
+  m_WaveIncompleteColor: {r: 0.41568628, g: 0.27058825, b: 0.15294118, a: 1}
+  m_WaveCompleteColor: {r: 0.85882354, g: 0.78039217, b: 0.48235294, a: 1}
 --- !u!1 &4049830641646702994
 GameObject:
   m_ObjectHideFlags: 0

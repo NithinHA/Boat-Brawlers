@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BaseObjects.Player;
 using DG.Tweening;
 using TMPro;
 using UI.ProgressBar;
@@ -56,6 +57,21 @@ namespace UI.Screens
         public void OnClick_Pause()
         {
             InGameUI.Instance.OnGamePause();
+        }
+        
+        public void OnClick_Attack()
+        {
+            Player.Instance.PlayerAttack.Attack();
+        }
+
+        public void OnClick_Pick()
+        {
+            Player.Instance.PlayerInteraction.PickItem();
+        }
+
+        public void OnClick_Drop()
+        {
+            Player.Instance.PlayerInteraction.DropItem();
         }
 
 #endregion

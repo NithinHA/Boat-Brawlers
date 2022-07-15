@@ -30,11 +30,13 @@ namespace UI
         public void OnGameOver()
         {
             GameOverScreen.Show();
+            InGameScreen.Hide();
         }
 
         public void OnGameWin()
         {
             GameWinScreen.Show();
+            InGameScreen.Hide();
         }
         
 #endregion

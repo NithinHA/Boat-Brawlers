@@ -10,6 +10,8 @@ namespace UI.Screens
         public override void Show()
         {
             base.Show();
+            
+            // show progress bar data here
         }
 
         public override void Hide()
