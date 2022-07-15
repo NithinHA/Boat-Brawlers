@@ -1,4 +1,5 @@
 using BaseObjects.Player;
+using UI;
 using UnityEngine;
 
 namespace BaseObjects
@@ -12,12 +13,15 @@ namespace BaseObjects
         public float RigTargetWeight = 1;
         public Transform Ref_Rh;
         public Transform Ref_Lh;
-
+        [Space]
+        [SerializeField] private InventorySelectionBubble m_InventorySelectionBubblePrefab;
+        [SerializeField] private RectTransform m_BubbleParent;
+        [SerializeField] private Vector3 m_HighlightBubbleOffset = Vector3.up;
         [Space]
         [SerializeField] private Rigidbody m_Rb;
         [SerializeField] private Collider[] m_Colliders;
 
-        private GameObject _highlightIndicator = null;
+        private InventorySelectionBubble _currentBubble = null;
 
         protected override void Start()
         {
@@ -34,11 +38,8 @@ namespace BaseObjects
                 return;
 
             // code to highlight the object
-            _highlightIndicator = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            _highlightIndicator.transform.SetParent(transform);
-            _highlightIndicator.transform.localPosition = Vector3.zero;
-            _highlightIndicator.transform.rotation = Quaternion.identity;
-            _highlightIndicator.GetComponent<Collider>().enabled = false;
+            _currentBubble = Instantiate(m_InventorySelectionBubblePrefab, m_BubbleParent);
+            _currentBubble.SetTarget(this.transform, m_HighlightBubbleOffset);
 
             InteractablesController.Instance.HighlightedObject = this;
         }
@@ -46,10 +47,10 @@ namespace BaseObjects
         public void RemoveHighlight()
         {
             // code to remove highlighter
-            if (_highlightIndicator != null)
+            if (_currentBubble != null)
             {
-                Destroy(_highlightIndicator.gameObject);
-                _highlightIndicator = null;
+                Destroy(_currentBubble.gameObject);
+                _currentBubble = null;
             }
 
             InteractablesController.Instance.HighlightedObject = null;

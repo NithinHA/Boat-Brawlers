@@ -1478,6 +1478,10 @@ MonoBehaviour:
   RigTargetWeight: 1
   Ref_Rh: {fileID: 251017041}
   Ref_Lh: {fileID: 1708901579}
+  m_InventorySelectionBubblePrefab: {fileID: 4986901684179842666, guid: 46d1c0c5c847141189eed8d619a868cd,
+    type: 3}
+  m_BubbleParent: {fileID: 0}
+  m_HighlightBubbleOffset: {x: 0, y: 0, z: 0}
   m_Rb: {fileID: 6986476149079779355}
   m_Colliders:
   - {fileID: 6986476149079779354}

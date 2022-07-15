@@ -364,6 +364,10 @@ MonoBehaviour:
   RigTargetWeight: 1
   Ref_Rh: {fileID: 988070759}
   Ref_Lh: {fileID: 1660384278}
+  m_InventorySelectionBubblePrefab: {fileID: 4986901684179842666, guid: 46d1c0c5c847141189eed8d619a868cd,
+    type: 3}
+  m_BubbleParent: {fileID: 0}
+  m_HighlightBubbleOffset: {x: 0, y: 0, z: 0}
   m_Rb: {fileID: 2283392925981169320}
   m_Colliders:
   - {fileID: 2283392925981169323}
@@ -390,6 +394,7 @@ MonoBehaviour:
       Hitboxes:
       - {fileID: 5085322736665212297}
       Radius: 1
+  m_HeavyAttackIndex: 0
   _instantaneousAttackWeight: 50
 --- !u!1 &8979249989409233615
 GameObject:
