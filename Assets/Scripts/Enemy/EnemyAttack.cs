@@ -12,6 +12,7 @@ namespace BaseObjects.Enemy
         [SerializeField] private GameObject m_EnemyHitbox;
         [SerializeField] private float m_HitKnockbackForce = 20f;
         [SerializeField] private GameObject m_GroundImpactParticles;
+        [SerializeField] private float m_CamShakeEnemyKnockbackMultiplier = .05f;
 
         private Action _onAttackAnimComplete;
 
@@ -42,6 +43,8 @@ namespace BaseObjects.Enemy
             // push back
             m_Enemy.Rb.AddForce(knockbackDirection * amount * m_HitKnockbackForce);
             // camera shake
+            float shakeSpeed = Player.Player.Instance.PlayerAttack.CurrentDamageAmount * m_CamShakeEnemyKnockbackMultiplier;
+            CameraShake.ShakeOnce(.5f, shakeSpeed);
             // play particles
             // play sfx
             if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)

@@ -28,8 +28,10 @@ namespace BaseObjects
 
         public void Attack(int index)
         {
-            if(index == m_HeavyAttackIndex)
-                RaftController.Instance.AddInstantaneousForce(transform.position, _instantaneousAttackWeight);
+            if (index == m_HeavyAttackIndex)
+            {
+                // RaftController.Instance.AddInstantaneousForce(transform.position, _instantaneousAttackWeight);
+            }
         }
 
         public int GetClipIndex()

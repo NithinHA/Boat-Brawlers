@@ -389,6 +389,7 @@ MonoBehaviour:
   m_Rb: {fileID: 8405511893906607234}
   m_Pivot: {fileID: 8405511893906607232}
   m_Indicator: {fileID: 511009761}
+  m_CamShakeOnGameOver: {x: 5, y: 3}
 --- !u!1 &8405511893907573943
 GameObject:
   m_ObjectHideFlags: 0

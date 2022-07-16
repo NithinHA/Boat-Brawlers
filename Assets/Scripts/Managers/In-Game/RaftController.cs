@@ -11,7 +11,8 @@ public class RaftController : Singleton<RaftController>
     [SerializeField] private Rigidbody m_Rb;
     [SerializeField] private Transform m_Pivot;
     [SerializeField] private ResultantVectorIndicator m_Indicator;
-    
+    [SerializeField] private Vector2 m_CamShakeOnGameOver = new Vector2(5f, 3f);
+
     public Action<BaseObject> OnObjectCreated;
     public Action<BaseObject> OnObjectDestroyed;
     
@@ -80,12 +81,14 @@ public class RaftController : Singleton<RaftController>
         {
             m_Rb.isKinematic = false;
             Debug.Log("DIEDED! (" + localRot + ")");
+            CameraShake.ShakeOnce(m_CamShakeOnGameOver.x, m_CamShakeOnGameOver.y);
             LevelManager.Instance.GameLost();
-            // Disable player control
-            // End game
         }
     }
 
+    /// <summary>
+    /// Work in progress
+    /// </summary>
     public void AddInstantaneousForce(Vector3 itemPos, float weight)
     { 
         Vector3 force = (itemPos - m_Pivot.position) * weight;
