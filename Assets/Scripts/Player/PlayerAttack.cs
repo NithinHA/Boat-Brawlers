@@ -199,7 +199,6 @@ namespace BaseObjects.Player
         {
             DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, _cachedRigWeight, .01f);
             ResetPostAttackCompletion();
-            _attackCooldownTimer = .1f;
         }
 
         /// <summary>

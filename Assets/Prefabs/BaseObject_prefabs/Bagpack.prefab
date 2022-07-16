@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35df9e21d012b4383be20a49788ca133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weight: 2
+  Weight: 2.5
   PivotType: 0
   RefPivot: {fileID: 1405577033}
   RigTargetWeight: 1
