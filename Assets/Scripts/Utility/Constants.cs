@@ -12,6 +12,7 @@ public class Constants
         public const string WEAPON_INDEX = "WeaponIndex";
         public const string ATTACK_INDEX = "AttackIndex";
         public const string DAMAGE = "Damage";
+        public const string VICTORY = "Victory";
 
         public const string DIVE = "Dive";
         public const string IS_MID_AIR = "IsMidAir";

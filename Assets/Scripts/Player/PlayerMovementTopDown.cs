@@ -11,7 +11,7 @@ namespace BaseObjects.Player
         [Space]
         [SerializeField] private float m_MaxSpeed = 5f;
         [SerializeField] private LayerMask m_AimLayerMask;
-        [SerializeField] private FloatingJoystick m_FloatingJoystick;
+        [SerializeField] private Joystick m_FloatingJoystick;
 
         [Header("AB test")]
         [SerializeField] private bool m_AimAlwaysForward = true;
@@ -26,8 +26,10 @@ namespace BaseObjects.Player
         private void Awake()
         {
             mMainCam = Camera.main;
-            if(mMainCam!= null)
+            if (mMainCam != null)
                 mCameraHolder = mMainCam.transform.parent;
+            if (m_FloatingJoystick == null)
+                m_FloatingJoystick = FindObjectOfType<Joystick>();
 
             _curSpeed = m_MaxSpeed;
 
@@ -134,6 +136,8 @@ namespace BaseObjects.Player
         private void OnGameEnd(bool isWin)
         {
             IsMovementEnabled = false;
+            m_Player.PlayerInteraction.DropItem();
+            m_Player.Anim.SetTrigger(Constants.Animation.VICTORY);
         }
 
 #endregion

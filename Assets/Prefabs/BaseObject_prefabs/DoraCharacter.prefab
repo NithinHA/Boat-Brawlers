@@ -721,6 +721,7 @@ MonoBehaviour:
   m_AimLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  m_FloatingJoystick: {fileID: 0}
   m_AimAlwaysForward: 1
   _curSpeed: 0
   IsMovementEnabled: 1
@@ -763,7 +764,7 @@ MonoBehaviour:
       Hitboxes:
       - {fileID: 6172691433775294609}
       Radius: 0.8
-  m_SimpleAttackDamage: 20
+  m_SimpleAttackDamage: 25
   CurrentDamageAmount: 0
   m_HitKnockbackForce: 200
   m_DefaultDamageCooldownTime: 4
