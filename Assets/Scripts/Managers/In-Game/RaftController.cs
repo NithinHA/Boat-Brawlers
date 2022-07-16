@@ -10,6 +10,7 @@ public class RaftController : Singleton<RaftController>
     [SerializeField] private Vector2 m_TumbleThreshold = new Vector2(30, 330);
     [SerializeField] private Rigidbody m_Rb;
     [SerializeField] private Transform m_Pivot;
+    [SerializeField] private ResultantVectorIndicator m_Indicator;
     
     public Action<BaseObject> OnObjectCreated;
     public Action<BaseObject> OnObjectDestroyed;
@@ -44,6 +45,7 @@ public class RaftController : Singleton<RaftController>
         ComputeResultantForce();
         PerformTilting();
         // m_Rb.AddForceAtPosition(Vector3.right, _resultant * m_WeightMultiplier);
+        m_Indicator.UpdateIndicator(_resultant, m_WeightMultiplier);
         CheckForGameOver();
     }
 
