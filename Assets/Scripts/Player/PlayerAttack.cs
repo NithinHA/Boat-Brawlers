@@ -88,7 +88,6 @@ namespace BaseObjects.Player
         {
             if (_attackCooldownTimer > 0 || !_canAttack)
             {
-                Debug.Log("=> wait for attack cooldown");
                 return;
             }
 
@@ -134,7 +133,6 @@ namespace BaseObjects.Player
         {
             if (_damageCooldownTimer > 0)
             {
-                Debug.Log("=> Saved by damage cooldown");
                 return;
             }
 

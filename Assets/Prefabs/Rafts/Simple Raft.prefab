@@ -368,8 +368,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 8.577211, y: 0.6740688, z: 5.9326096}
-  m_Center: {x: 0, y: 0.2173121, z: -0.05398512}
+  m_Size: {x: 8.577211, y: 0.8288644, z: 5.9326096}
+  m_Center: {x: 0, y: 0.22698686, z: -0.05398512}
 --- !u!114 &8405511893906607235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ MonoBehaviour:
   PersistentOnSceneChange: 0
   m_WeightMultiplier: 0.4
   m_MovementThreshold: 0
-  m_TumbleThreshold: {x: 30, y: 330}
+  m_TumbleThreshold: 30
   m_Rb: {fileID: 8405511893906607234}
   m_Pivot: {fileID: 8405511893906607232}
   m_Indicator: {fileID: 511009761}

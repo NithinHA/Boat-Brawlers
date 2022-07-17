@@ -30,7 +30,6 @@ public class CameraShake : MonoBehaviour
 
     public static void ShakeOnce(float duration = 1f, float speed = 10f, Vector3? amount = null, Camera camera = null, bool deltaMovement = true, AnimationCurve curve = null)
     {
-        Debug.Log("Cam shacked at: " + speed);
         //set data
         var instance = ((camera != null) ? camera : Camera.main).gameObject.AddComponent<CameraShake>();
         instance.Duration = duration;
