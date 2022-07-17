@@ -46,7 +46,6 @@ namespace BaseObjects.Enemy
             float shakeSpeed = Player.Player.Instance.PlayerAttack.CurrentDamageAmount * m_CamShakeEnemyKnockbackMultiplier;
             CameraShake.ShakeOnce(.5f, shakeSpeed);
             // play particles
-            // play sfx
             if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)
             {
                 if(m_EnemyHitbox.activeSelf)
@@ -65,6 +64,8 @@ namespace BaseObjects.Enemy
         public virtual void AnimEvent_AttackBegin()
         {
             m_EnemyHitbox.SetActive(true);
+            AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_LEAP);
+
         }
 
         public virtual void AnimEvent_AttackEnd()

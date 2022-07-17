@@ -37,5 +37,27 @@ public class Constants
     public class SceneNames
     {
         public const string MainMenu = "MainMenu";
+        public const string Level1 = "Game";
+    }
+
+    public class SoundNames
+    {
+        public const string OCEAN_BG = "Ocean_bg";
+        public const string RAFT_BG = "Raft_bg";
+        
+        public const string ENEMY_SPAWN = "EnemySpawn";
+        public const string ENEMY_LAND = "EnemyLand";
+        public const string ENEMY_LEAP = "EnemyLeap";
+        public const string ENEMY_IMPACT = "EnemyImpact";
+        public const string ENEMY_DEATH = "EnemyDeath";
+
+        public const string PLAYER_FALL = "PlayerFall";
+        public const string PLAYER_KICK = "PlayerKick";
+        public const string WEAPON_SWING = "WeaponSwing";
+        public const string HAMMER_SMASH = "HammerSmash";
+
+        public const string ITEM_DROP = "ItemDrop";
+        public const string RAFT_FALL = "RaftFall";
+        public const string RAFT_SINK = "RaftSink";
     }
 }

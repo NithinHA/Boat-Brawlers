@@ -113,6 +113,7 @@ namespace BaseObjects.Player
         {
             _curAttackIndex = Utilities.GetWeightedRandomIndex(_animWeights);
             AnimateAttack(0, _curAttackIndex);
+            AudioManager.Instance.PlaySound(Constants.SoundNames.PLAYER_KICK);
         }
 
         private void WeaponAttack()
@@ -192,6 +193,15 @@ namespace BaseObjects.Player
             }
         }
 
+        public void AnimEvent_HeavyAttackImpact()
+        {
+            if (_heldWeapon && _curAttackIndex == _heldWeapon.HeavyAttackIndex)
+            {
+                AudioManager.Instance.PlaySound(Constants.SoundNames.HAMMER_SMASH);
+                // play particles impact
+            }
+        }
+
         public void AnimEvent_AttackEnd()
         {
             ResetCurrentHitboxes();
@@ -219,7 +229,7 @@ namespace BaseObjects.Player
             ResetCurrentHitboxes();         // as a safety measure. Sometimes hitboxes will be enabled even after attack fails and knockback occurs.
             
             Instantiate(m_GroundImpactParticles, transform.position, Quaternion.identity);
-            // play sfx
+            AudioManager.Instance.PlaySound(Constants.SoundNames.PLAYER_FALL);
             // camera shake
             CameraShake.ShakeOnce(m_CamShakePlayerFall.x, m_CamShakePlayerFall.y);
             

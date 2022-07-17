@@ -137,8 +137,8 @@ namespace BaseObjects.Enemy
             Anim.SetTrigger(Constants.Animation.LANDED);
             _leapTimer = m_NextLeapWaitTime;
             base.Start();
-            
-            // play sfx
+
+            AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_LAND);
             // play particles
         }
 
@@ -161,9 +161,11 @@ namespace BaseObjects.Enemy
             if (Health <= 0)
             {
                 KillEnemy();
+                AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_DEATH);      // play EnemyDeath effect only when killed by player on Raft.
                 return;
             }
-            
+
+            AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_IMPACT);
             _leapTimer = m_NextLeapWaitTime;
             Anim.SetTrigger(Constants.Animation.DAMAGE);
 

@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using BaseObjects;
+using DG.Tweening;
 
 public class RaftController : Singleton<RaftController>
 {
     [SerializeField] private float m_WeightMultiplier = .1f;
     [SerializeField] private float m_MovementThreshold = 0f;
-    [SerializeField] private Vector2 m_TumbleThreshold = new Vector2(30, 330);
+    [SerializeField] private float m_TumbleThreshold = 30;
     [SerializeField] private Rigidbody m_Rb;
     [SerializeField] private Transform m_Pivot;
     [SerializeField] private ResultantVectorIndicator m_Indicator;
@@ -18,6 +19,8 @@ public class RaftController : Singleton<RaftController>
     
     private List<BaseObject> _allObjects = new List<BaseObject>();
     private Vector3 _resultant = Vector3.zero;
+
+    private AudioSource _raftBgAudio;
 
 #region Unity callbacks
 
@@ -31,9 +34,20 @@ public class RaftController : Singleton<RaftController>
         OnObjectDestroyed += OnObjectRemoved;
     }
 
+    protected override void Start()
+    {
+        base.Start();
+        AudioManager.Instance.PlaySound(Constants.SoundNames.RAFT_BG);
+        _raftBgAudio = AudioManager.Instance.GetSound(Constants.SoundNames.RAFT_BG).source;
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();
+
+        if(AudioManager.Instance != null)
+            AudioManager.Instance.StopSound(Constants.SoundNames.RAFT_BG);
+
         OnObjectCreated -= OnObjectAdded;
         OnObjectDestroyed -= OnObjectRemoved;
     }
@@ -47,7 +61,10 @@ public class RaftController : Singleton<RaftController>
         PerformTilting();
         // m_Rb.AddForceAtPosition(Vector3.right, _resultant * m_WeightMultiplier);
         m_Indicator.UpdateIndicator(_resultant, m_WeightMultiplier);
-        CheckForGameOver();
+        Vector3 localRot = transform.localRotation.eulerAngles;
+        Vector3 localRot180 = new Vector3(Mathf.Repeat(localRot.x + 180, 360) - 180, 0, Mathf.Repeat(localRot.z + 180, 360) - 180);
+        UpdateRaftCrackingSound(localRot180);
+        CheckForGameOver(localRot180);
     }
 
 #endregion
@@ -74,14 +91,26 @@ public class RaftController : Singleton<RaftController>
         }
     }
 
-    private void CheckForGameOver()
+    private void UpdateRaftCrackingSound(Vector3 localRot180)
     {
-        Vector3 localRot = transform.localRotation.eulerAngles;
-        if ((localRot.x > m_TumbleThreshold.x && localRot.x < m_TumbleThreshold.y) || (localRot.z > m_TumbleThreshold.x && localRot.z < m_TumbleThreshold.y))
+        float diff = Mathf.Min(Mathf.Abs(m_TumbleThreshold) - Mathf.Abs(localRot180.x), Mathf.Abs(m_TumbleThreshold) - Mathf.Abs(localRot180.z));
+        float amount = 1 - diff / m_TumbleThreshold;        // [0, 1]
+        _raftBgAudio.volume = amount * .8f;
+
+    }
+
+    private void CheckForGameOver(Vector3 localRot180)
+    {
+        // Vector3 localRot = transform.localRotation.eulerAngles;
+        // if ((localRot.x > m_TumbleThreshold.x && localRot.x < m_TumbleThreshold.y) || (localRot.z > m_TumbleThreshold.x && localRot.z < m_TumbleThreshold.y))
+        if(Mathf.Abs(localRot180.x) > m_TumbleThreshold || Mathf.Abs(localRot180.z) > m_TumbleThreshold)
         {
             m_Rb.isKinematic = false;
-            Debug.Log("DIEDED! (" + localRot + ")");
+            Debug.Log("DIEDED! (" + localRot180 + ")");
             CameraShake.ShakeOnce(m_CamShakeOnGameOver.x, m_CamShakeOnGameOver.y);
+            AudioManager.Instance.StopSound(Constants.SoundNames.RAFT_BG);
+            AudioManager.Instance.PlaySound(Constants.SoundNames.RAFT_FALL);
+            DOVirtual.DelayedCall(1f, () => AudioManager.Instance.PlaySound(Constants.SoundNames.RAFT_SINK));
             LevelManager.Instance.GameLost();
         }
     }

@@ -27,7 +27,7 @@ namespace BaseObjects.Player
         {
             mMainCam = Camera.main;
             if (mMainCam != null)
-                mCameraHolder = mMainCam.transform.parent;
+                mCameraHolder = mMainCam.transform.GetComponentInParent<CameraHolder>().transform;
             if (m_FloatingJoystick == null)
                 m_FloatingJoystick = FindObjectOfType<Joystick>();
 

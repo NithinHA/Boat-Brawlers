@@ -13,7 +13,7 @@ namespace UI
 
         public void OnClick_Play()
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(Constants.SceneNames.Level1);
         }
 
         public void OnClick_Quit()

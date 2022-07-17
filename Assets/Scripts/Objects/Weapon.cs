@@ -11,7 +11,7 @@ namespace BaseObjects
         public float Damage = 40f;
         public WeaponType Type;
         [SerializeField] private AnimWeightHitboxMap[] m_AnimWeightHitboxMap;
-        [SerializeField] private int m_HeavyAttackIndex = 0;
+        public int HeavyAttackIndex = 0;
 
         private float[] _animWeights;
 
@@ -28,7 +28,8 @@ namespace BaseObjects
 
         public void Attack(int index)
         {
-            if (index == m_HeavyAttackIndex)
+            AudioManager.Instance.PlaySound(Constants.SoundNames.WEAPON_SWING);
+            if (index == HeavyAttackIndex)
             {
                 // RaftController.Instance.AddInstantaneousForce(transform.position, _instantaneousAttackWeight);
             }

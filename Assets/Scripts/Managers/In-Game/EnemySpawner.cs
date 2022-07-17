@@ -57,6 +57,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
         EnemiesSpawned.Add(newEnemy);
         RandomizeEnemySize(newEnemy);
         ShootEnemyOntoRaft(newEnemy, spawnPoint);
+        AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_SPAWN);
     }
 
     /// <summary>
