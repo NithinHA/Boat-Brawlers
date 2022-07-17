@@ -13,12 +13,12 @@ namespace UI.Screens
         [SerializeField] private GameObject m_SoundOn;
         [SerializeField] private GameObject m_SoundOff;
 
-        private bool _isSoundEnabled;
+        private bool _isSoundEnabled = true;
 
         public override void Show()
         {
             base.Show();
-            // _isSoundEnabled = AudioManager.Instance.IsMuted
+            _isSoundEnabled = !AudioManager.Instance.IsMuted;
             ToggleSoundButton();
             Time.timeScale = 0;
             m_DiskPanel.DORotate(new Vector3(0, 0, -180), .3f).SetEase(Ease.OutBack)
@@ -33,6 +33,7 @@ namespace UI.Screens
 
         private void ToggleSoundButton()
         {
+            AudioManager.Instance.ToggleSound(_isSoundEnabled);
             if (_isSoundEnabled)
             {
                 m_SoundOn.SetActive(true);

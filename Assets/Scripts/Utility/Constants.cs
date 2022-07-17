@@ -36,8 +36,9 @@ public class Constants
 
     public class SceneNames
     {
-        public const string MainMenu = "MainMenu";
-        public const string Level1 = "Game";
+        public const string Main_Menu = "MainMenu";
+        public const string Level_1 = "Level_1";
+        public const string Level_2 = "Level_2";
     }
 
     public class SoundNames

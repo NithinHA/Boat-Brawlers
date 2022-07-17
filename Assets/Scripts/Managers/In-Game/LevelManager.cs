@@ -46,7 +46,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene(Constants.SceneNames.MainMenu);
+        SceneManager.LoadScene(Constants.SceneNames.Main_Menu);
     }
     
     public void RetryLevel()

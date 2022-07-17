@@ -4,6 +4,7 @@ using UnityEngine;
 public class AudioManager : Singleton<AudioManager>
 {
 	public Sound[] sounds;
+	public bool IsMuted;
 
 	protected override void Awake()
 	{
@@ -59,5 +60,14 @@ public class AudioManager : Singleton<AudioManager>
         {
 			s.clip = newClip;
         }
+	}
+
+	public void ToggleSound(bool active)
+	{
+		IsMuted = !active;
+		foreach (Sound sound in sounds)
+		{
+			sound.source.mute = IsMuted;
+		}
 	}
 }
