@@ -11,6 +11,7 @@ public class CameraHolder : Singleton<CameraHolder>
 
     private void Update()
     {
+#if !UNITY_EDITOR
         if (Input.touchCount == 1 && !IsPointerOverUIObject())
         {
             Touch touch = Input.GetTouch(0);
@@ -31,6 +32,16 @@ public class CameraHolder : Singleton<CameraHolder>
                     break;
             }
         }
+        #else
+        if (Input.GetKey(KeyCode.E))
+        {
+            transform.Rotate(0f, -3 * m_PanSpeed * Time.deltaTime, 0f);
+        }
+        else if (Input.GetKey(KeyCode.Q))
+        {
+            transform.Rotate(0f, 3 * m_PanSpeed * Time.deltaTime, 0f);
+        }
+#endif
     }
     
     private bool IsPointerOverUIObject() {

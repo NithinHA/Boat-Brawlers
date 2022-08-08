@@ -12,13 +12,13 @@ namespace BaseObjects.Player
         [SerializeField] private float m_MaxSpeed = 5f;
         [SerializeField] private LayerMask m_AimLayerMask;
         [SerializeField] private Joystick m_FloatingJoystick;
+        [SerializeField] private Transform m_CameraHolder;
 
         [Header("AB test")]
         [SerializeField] private bool m_AimAlwaysForward = true;
 
         private Vector3 mPlayerMovement = Vector3.zero;
         private Camera mMainCam;
-        private Transform mCameraHolder;
         [SerializeField] private float _curSpeed;
 
         public bool IsMovementEnabled = true;
@@ -26,8 +26,8 @@ namespace BaseObjects.Player
         private void Awake()
         {
             mMainCam = Camera.main;
-            if (mMainCam != null)
-                mCameraHolder = mMainCam.transform.GetComponentInParent<CameraHolder>().transform;
+            if (m_CameraHolder == null && mMainCam != null) 
+                m_CameraHolder = mMainCam.transform.GetComponentInParent<CameraHolder>().transform;
             if (m_FloatingJoystick == null)
                 m_FloatingJoystick = FindObjectOfType<Joystick>();
 
@@ -35,14 +35,15 @@ namespace BaseObjects.Player
 
             m_Player.PlayerInteraction.OnItemPicked += OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped += OnItemDropped;
-            LevelManager.Instance.OnGameEnd += OnGameEnd;
+            if (LevelManager.Instance != null)
+                LevelManager.Instance.OnGameEnd += OnGameEnd;
         }
 
         private void OnDestroy()
         {
             m_Player.PlayerInteraction.OnItemPicked -= OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped -= OnItemDropped;
-            if(LevelManager.Instance != null)
+            if (LevelManager.Instance != null)
                 LevelManager.Instance.OnGameEnd -= OnGameEnd;
         }
 
@@ -71,7 +72,7 @@ namespace BaseObjects.Player
             // }
 
             mPlayerMovement = new Vector3(playerInputX, 0, playerInputY);
-            float angleDiff = mCameraHolder.localRotation.eulerAngles.y;
+            float angleDiff = m_CameraHolder.localRotation.eulerAngles.y;
             mPlayerMovement = Quaternion.AngleAxis(angleDiff, Vector3.up) * mPlayerMovement;
 
             float velocityZ = Vector3.Dot(mPlayerMovement.normalized, transform.forward);

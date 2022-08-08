@@ -10,40 +10,45 @@ namespace BaseObjects
         public float AttackCooldown = 1f;
         public float Damage = 40f;
         public WeaponType Type;
-        [SerializeField] private AnimWeightHitboxMap[] m_AnimWeightHitboxMap;
-        public int HeavyAttackIndex = 0;
+        public int MaxComboIndex = 1;
+        [SerializeField] private AtkAnimVariant[] m_AttackVariants;
+        public AtkAnimInfo HeavyAttackAnimInfo;
 
-        private float[] _animWeights;
-
-        [SerializeField] private float _instantaneousAttackWeight = 50f;
+        private float[] _variantWeights;
 
         protected override void Start()
         {
             base.Start();
 
-            _animWeights = new float[m_AnimWeightHitboxMap.Length];
-            for (int i = 0; i < m_AnimWeightHitboxMap.Length; i++)
-                _animWeights[i] = m_AnimWeightHitboxMap[i].Weight;
+            _variantWeights = new float[m_AttackVariants.Length];
+            for (int i = 0; i < m_AttackVariants.Length; i++)
+                _variantWeights[i] = m_AttackVariants[i].Weight;
         }
 
         public void Attack(int index)
         {
             AudioManager.Instance.PlaySound(Constants.SoundNames.WEAPON_SWING);
-            if (index == HeavyAttackIndex)
-            {
-                // RaftController.Instance.AddInstantaneousForce(transform.position, _instantaneousAttackWeight);
-            }
         }
 
-        public int GetClipIndex()
+        // public int GetClipIndex()
+        // {
+        //     return Utilities.GetWeightedRandomIndex(_variantWeights);
+        // }
+
+        public AtkAnimVariant ChooseVariant()
         {
-            return Utilities.GetWeightedRandomIndex(_animWeights);
+            return m_AttackVariants[Utilities.GetWeightedRandomIndex(_variantWeights)];
         }
 
-        public HitboxInfo GetHitboxInfoForAttackIndex(int index)
-        {
-            return m_AnimWeightHitboxMap[index].HitboxInfo;
-        }
+        // public HitboxInfo GetHitboxInfoForAttackIndex(int index)
+        // {
+        //     return m_AnimWeightHitboxMap[index].HitboxInfo;
+        // }
+
+        // public bool IsHeavyAttack(int attackIndex)
+        // {
+        //     return false;
+        // }
     }
 
     public enum WeaponType

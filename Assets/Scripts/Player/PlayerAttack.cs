@@ -10,17 +10,25 @@ namespace BaseObjects.Player
 
         [Header("Attack info")]
         [SerializeField] private float m_DefaultAttackCooldownTime = .5f;
-        [SerializeField] private AnimWeightHitboxMap[] m_AnimWeightHitboxMap;
+
+        [SerializeField] private AtkAnimVariant[] m_AttackVariants;
+        // [SerializeField] private AtkAnimInfo[] m_AnimWeightHitboxMap;
         [SerializeField] private float m_SimpleAttackDamage = 20f;
 
         private float _attackCooldownTimer = 0f;
         private bool _canAttack = true;
         private Weapon _heldWeapon;
         public bool HasWeapon => _heldWeapon != null;
-        private float[] _animWeights;
+        private float[] _variantWeights;
         private List<GameObject> _playerHitboxes = new List<GameObject>();
         public float CurrentDamageAmount;
-        private int _curAttackIndex;
+
+        // combo data
+        private bool _isPerformingCombo = false;
+        private int _simpleAttackMaxComboIndex = 1;
+        private int _currentComboMax = 0;
+        private int _currentComboIndex = 0;
+        private AtkAnimVariant _selectedComboVariant = null;
 
         [Header("Damage info")]
         [SerializeField] private float m_HitKnockbackForce = 400f;
@@ -29,7 +37,7 @@ namespace BaseObjects.Player
         [SerializeField] private Vector2 m_CamShakePlayerFall = new Vector2(.5f, 1.5f);
 
         private float _damageCooldownTimer = 0f;
-
+        private bool _isPlayingDamageAnim = false;
         private float _cachedRigWeight;
 
 
@@ -37,9 +45,9 @@ namespace BaseObjects.Player
 
         private void Start()
         {
-            _animWeights = new float[m_AnimWeightHitboxMap.Length];
-            for (int i = 0; i < m_AnimWeightHitboxMap.Length; i++)
-                _animWeights[i] = m_AnimWeightHitboxMap[i].Weight;
+            _variantWeights = new float[m_AttackVariants.Length];
+            for (int i = 0; i < m_AttackVariants.Length; i++)
+                _variantWeights[i] = m_AttackVariants[i].Weight;
 
             CurrentDamageAmount = m_SimpleAttackDamage;            // player starts barehanded
 
@@ -67,6 +75,8 @@ namespace BaseObjects.Player
             
             if (Input.GetKeyDown(KeyCode.K))
                 Attack();
+            else if (Input.GetKeyDown(KeyCode.J))
+                Attack(true);
             else if (Input.GetKeyDown(KeyCode.O))
                 TakeDamage(-transform.forward.normalized);
         }
@@ -78,22 +88,34 @@ namespace BaseObjects.Player
                 Vector3 knockbackDirection = transform.position - other.transform.position;
                 knockbackDirection.y = 0;
                 TakeDamage(knockbackDirection.normalized);
-                // enemy.HitSuccess();
             }
         }
 
 #endregion
 
-        public void Attack()
+        private bool _isChargedAttacking;
+        public void Attack(bool isChargedAttack = false)
         {
-            if (_attackCooldownTimer > 0 || !_canAttack)
+            if (_isPlayingDamageAnim && _isChargedAttacking)
+                return;
+
+            if (_currentComboIndex > _currentComboMax)      // Bugfix: If player performs 2nd attack at the time interval between AnimEvents- AttackEnd() & ClipEnd(), the player freezes as AttackEnd() returns thinking Combo has ended, while ClipEnd() returns thinking Combo is still going on.
+                return;
+
+            if ((_attackCooldownTimer > 0 || !_canAttack) && !isChargedAttack)
             {
+                _isPerformingCombo = true;
+                _currentComboMax = Mathf.Clamp(++_currentComboMax, 0, !HasWeapon ? _simpleAttackMaxComboIndex : _heldWeapon.MaxComboIndex);
                 return;
             }
 
+            _isChargedAttacking = isChargedAttack;
             _attackCooldownTimer = !HasWeapon ? m_DefaultAttackCooldownTime : _heldWeapon.AttackCooldown;
             _canAttack = false;
-            _cachedRigWeight = m_Player.Rig.weight;
+            if (!_isPerformingCombo)
+            {
+                _cachedRigWeight = m_Player.Rig.weight;
+            }
             m_Player.Rig.weight = 0;
             m_Player.PlayerInteraction.IsInteractionEnabled = false;
 
@@ -103,23 +125,33 @@ namespace BaseObjects.Player
             }
             else
             {
-                WeaponAttack();
+                WeaponAttack(isChargedAttack);
             }
         }
 
-        
         private void SimpleAttack()
         {
-            _curAttackIndex = Utilities.GetWeightedRandomIndex(_animWeights);
-            AnimateAttack(0, _curAttackIndex);
+            _selectedComboVariant ??= m_AttackVariants[Utilities.GetWeightedRandomIndex(_variantWeights)];
+            int animIndex = _selectedComboVariant.AllAnimInfos[_currentComboIndex].AnimIndex;
+            AnimateAttack(0, animIndex);
             AudioManager.Instance.PlaySound(Constants.SoundNames.PLAYER_KICK);
         }
 
-        private void WeaponAttack()
+        private void WeaponAttack(bool isChargedAttack = false)
         {
-            _curAttackIndex = _heldWeapon.GetClipIndex();
-            AnimateAttack((int) _heldWeapon.Type, _curAttackIndex);
-            _heldWeapon.Attack(_curAttackIndex);
+            int animIndex = 0;
+            if (isChargedAttack)
+            {
+                _selectedComboVariant = new AtkAnimVariant(_heldWeapon.HeavyAttackAnimInfo);
+                animIndex = _selectedComboVariant.AllAnimInfos[0].AnimIndex;
+            }
+            else
+            {
+                _selectedComboVariant ??= _heldWeapon.ChooseVariant();
+                animIndex = _selectedComboVariant.AllAnimInfos[_currentComboIndex].AnimIndex;
+            }
+            AnimateAttack((int) _heldWeapon.Type, animIndex);
+            _heldWeapon.Attack(_currentComboIndex);
         }
 
         private void AnimateAttack(int weaponIndex, int attackIndex)
@@ -145,6 +177,11 @@ namespace BaseObjects.Player
             // push back
             m_Player.Rb.AddForce(knockbackDirection * m_HitKnockbackForce);
             m_Player.Anim.SetTrigger(Constants.Animation.DAMAGE);
+            
+            _isPlayingDamageAnim = true;
+            // resets
+            if(_isPerformingCombo)
+                ResetCombos();
         }
 
 
@@ -176,7 +213,10 @@ namespace BaseObjects.Player
             m_Player.PlayerMovement.IsMovementEnabled = false;
 
             ResetCurrentHitboxes();
-            HitboxInfo hitboxInfo = !HasWeapon ? m_AnimWeightHitboxMap[_curAttackIndex].HitboxInfo : _heldWeapon.GetHitboxInfoForAttackIndex(_curAttackIndex);
+            if (_selectedComboVariant == null)
+                Debug.LogError("=> Variant null!");
+            HitboxInfo hitboxInfo = _selectedComboVariant.AllAnimInfos[_currentComboIndex].HitboxInfo;
+
             foreach (Collider col in hitboxInfo.Hitboxes)
             {
                 SphereCollider hitbox = col as SphereCollider;
@@ -193,20 +233,31 @@ namespace BaseObjects.Player
 
         public void AnimEvent_HeavyAttackImpact()
         {
-            if (_heldWeapon && _curAttackIndex == _heldWeapon.HeavyAttackIndex)
-            {
-                AudioManager.Instance.PlaySound(Constants.SoundNames.HAMMER_SMASH);
-                // play particles impact
-            }
+            AudioManager.Instance.PlaySound(Constants.SoundNames.HAMMER_SMASH);
+            // play particles impact
+            RaftController_Custom.Instance.AddInstantaneousForce(_heldWeapon.transform.position, 1f);
         }
 
         public void AnimEvent_AttackEnd()
         {
             ResetCurrentHitboxes();
+
+            _currentComboIndex++;
+            if (_currentComboIndex <= _currentComboMax)
+            {
+                m_Player.PlayerMovement.IsMovementEnabled = true;
+                _canAttack = true;
+                _attackCooldownTimer = 0;
+                Attack();
+            }
         }
 
         public void AnimEvent_ClipEnd()
         {
+            if (_currentComboIndex <= _currentComboMax)
+                return;
+
+            ResetCombos();
             DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, _cachedRigWeight, .01f);
             ResetPostAttackCompletion();
         }
@@ -238,6 +289,7 @@ namespace BaseObjects.Player
 
         public void AnimEvent_KnockbackEnd()
         {
+            _isPlayingDamageAnim = false;
             ResetPostAttackCompletion();
         }
 
@@ -258,14 +310,37 @@ namespace BaseObjects.Player
             _canAttack = true;
         }
 
+        private void ResetCombos()
+        {
+            _isPerformingCombo = false;
+            _currentComboMax = 0;
+            _currentComboIndex = 0;
+            _selectedComboVariant = null;
+
+            if (_isChargedAttacking)
+                _isChargedAttacking = false;
+        }
     }
 }
 
 [System.Serializable]
-public class AnimWeightHitboxMap
+public class AtkAnimVariant
+{
+    public AtkAnimInfo[] AllAnimInfos;
+    public float Weight;
+
+    public AtkAnimVariant(AtkAnimInfo singleAttack)
+    {
+        AllAnimInfos = new AtkAnimInfo[] {singleAttack};
+        Weight = 1;
+    }
+}
+
+[System.Serializable]
+public class AtkAnimInfo
 {
     public string ClipName;
-    public float Weight;
+    public int AnimIndex;
     public HitboxInfo HitboxInfo;
 }
 

@@ -136,6 +136,38 @@ MonoBehaviour:
   m_TailScaleMultiplier: 0.4
   m_HeadDisplacementMultiplier: 1.25
   m_Range: {x: 0.5, y: 1}
+  m_RaftT: {fileID: 8405511893906607232}
+--- !u!1 &824272356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 824272357}
+  m_Layer: 0
+  m_Name: Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &824272357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824272356}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 0.99999976, y: 1, z: 0.99999976}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8405511893906607232}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &873030501
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +347,7 @@ GameObject:
   - component: {fileID: 8405511893906607232}
   - component: {fileID: 8405511893906607234}
   - component: {fileID: 8405511893906607233}
-  - component: {fileID: 8405511893906607235}
+  - component: {fileID: 8045765444861380829}
   m_Layer: 8
   m_Name: Simple Raft
   m_TagString: Raft
@@ -338,6 +370,7 @@ Transform:
   - {fileID: 8299247861245268117}
   - {fileID: 8405511893907573942}
   - {fileID: 511009760}
+  - {fileID: 824272357}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -349,9 +382,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8405511893906607238}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 20
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
@@ -370,7 +403,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.577211, y: 0.8288644, z: 5.9326096}
   m_Center: {x: 0, y: 0.22698686, z: -0.05398512}
---- !u!114 &8405511893906607235
+--- !u!114 &8045765444861380829
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -379,15 +412,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8405511893906607238}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9acc0c4e34344f4aa8cea71f0bc0d3e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ebd93e9af668444fb9cffda05a5c0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PersistentOnSceneChange: 0
   m_WeightMultiplier: 0.4
+  m_InstantneousForceMultiplier: 20
   m_MovementThreshold: 0
   m_TumbleThreshold: 30
   m_Rb: {fileID: 8405511893906607234}
-  m_Pivot: {fileID: 8405511893906607232}
+  m_Pivot: {fileID: 824272357}
   m_Indicator: {fileID: 511009761}
   m_CamShakeOnGameOver: {x: 5, y: 3}
 --- !u!1 &8405511893907573943

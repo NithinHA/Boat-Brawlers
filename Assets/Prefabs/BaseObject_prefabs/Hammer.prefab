@@ -375,27 +375,35 @@ MonoBehaviour:
   AttackCooldown: 1.5
   Damage: 40
   Type: 1
-  m_AnimWeightHitboxMap:
-  - ClipName: HammerSmash
-    Weight: 0.8
+  MaxComboIndex: 1
+  m_AttackVariants:
+  - AllAnimInfos:
+    - ClipName: Hammer_Swing1
+      AnimIndex: 1
+      HitboxInfo:
+        Hitboxes:
+        - {fileID: 5085322736665212297}
+        Radius: 1
+    - ClipName: Hammer_Swing2
+      AnimIndex: 2
+      HitboxInfo:
+        Hitboxes:
+        - {fileID: 5085322736665212297}
+        Radius: 1
+    - ClipName: Hammer_Smash
+      AnimIndex: 0
+      HitboxInfo:
+        Hitboxes:
+        - {fileID: 5085322736665212297}
+        Radius: 2
+    Weight: 1
+  HeavyAttackAnimInfo:
+    ClipName: Hammer_Smash
+    AnimIndex: 0
     HitboxInfo:
       Hitboxes:
       - {fileID: 5085322736665212297}
       Radius: 2
-  - ClipName: HammerSwing_1
-    Weight: 1.5
-    HitboxInfo:
-      Hitboxes:
-      - {fileID: 5085322736665212297}
-      Radius: 1
-  - ClipName: HammerSwing_2
-    Weight: 1.5
-    HitboxInfo:
-      Hitboxes:
-      - {fileID: 5085322736665212297}
-      Radius: 1
-  m_HeavyAttackIndex: 0
-  _instantaneousAttackWeight: 50
 --- !u!1 &8979249989409233615
 GameObject:
   m_ObjectHideFlags: 0
