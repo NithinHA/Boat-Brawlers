@@ -180,6 +180,8 @@ public class RaftController : Singleton<RaftController>
 
 #endregion
 
+#if UNITY_EDITOR
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -190,4 +192,6 @@ public class RaftController : Singleton<RaftController>
         Handles.color = Color.green;
         Handles.DrawDottedLine(_itemPos, m_Pivot.position, 3);
     }
+    
+#endif
 }

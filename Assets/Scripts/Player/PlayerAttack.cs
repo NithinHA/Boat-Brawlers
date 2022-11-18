@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -27,7 +28,7 @@ namespace BaseObjects.Player
         private bool _isPerformingCombo = false;
         private int _simpleAttackMaxComboIndex = 1;
         private int _currentComboMax = 0;
-        private int _currentComboIndex = 0;
+        [SerializeField]private int _currentComboIndex = 0;
         private AtkAnimVariant _selectedComboVariant = null;
 
         [Header("Damage info")]
@@ -94,9 +95,10 @@ namespace BaseObjects.Player
 #endregion
 
         private bool _isChargedAttacking;
+        private Coroutine _chargedAttackErrorHandlerCoroutine;
         public void Attack(bool isChargedAttack = false)
         {
-            if (_isPlayingDamageAnim && _isChargedAttacking)
+            if (_isPlayingDamageAnim || _isChargedAttacking)
                 return;
 
             if (_currentComboIndex > _currentComboMax)      // Bugfix: If player performs 2nd attack at the time interval between AnimEvents- AttackEnd() & ClipEnd(), the player freezes as AttackEnd() returns thinking Combo has ended, while ClipEnd() returns thinking Combo is still going on.
@@ -110,6 +112,9 @@ namespace BaseObjects.Player
             }
 
             _isChargedAttacking = isChargedAttack;
+            if (isChargedAttack)
+                _chargedAttackErrorHandlerCoroutine = StartCoroutine(ChargedAttackErrorHandler());
+
             _attackCooldownTimer = !HasWeapon ? m_DefaultAttackCooldownTime : _heldWeapon.AttackCooldown;
             _canAttack = false;
             if (!_isPerformingCombo)
@@ -180,8 +185,7 @@ namespace BaseObjects.Player
             
             _isPlayingDamageAnim = true;
             // resets
-            if(_isPerformingCombo)
-                ResetCombos();
+            ResetCombos();
         }
 
 
@@ -214,7 +218,10 @@ namespace BaseObjects.Player
 
             ResetCurrentHitboxes();
             if (_selectedComboVariant == null)
+            {
                 Debug.LogError("=> Variant null!");
+                return;
+            }
             HitboxInfo hitboxInfo = _selectedComboVariant.AllAnimInfos[_currentComboIndex].HitboxInfo;
 
             foreach (Collider col in hitboxInfo.Hitboxes)
@@ -240,9 +247,13 @@ namespace BaseObjects.Player
 
         public void AnimEvent_AttackEnd()
         {
+            if (_selectedComboVariant == null)
+                return;
+
             ResetCurrentHitboxes();
 
-            _currentComboIndex++;
+            if (!_isChargedAttacking)
+                _currentComboIndex++;
             if (_currentComboIndex <= _currentComboMax)
             {
                 m_Player.PlayerMovement.IsMovementEnabled = true;
@@ -254,7 +265,7 @@ namespace BaseObjects.Player
 
         public void AnimEvent_ClipEnd()
         {
-            if (_currentComboIndex <= _currentComboMax)
+            if (_currentComboIndex <= _currentComboMax && !_isChargedAttacking)
                 return;
 
             ResetCombos();
@@ -317,6 +328,21 @@ namespace BaseObjects.Player
             _currentComboIndex = 0;
             _selectedComboVariant = null;
 
+            if (_isChargedAttacking)
+            {
+                _isChargedAttacking = false;
+                StopCoroutine(_chargedAttackErrorHandlerCoroutine);
+                _chargedAttackErrorHandlerCoroutine = null;
+            }
+        }
+
+        /// <summary>
+        /// This coroutine should technically never complete in any standard game. It exists as a error handler, for the error where _isChargedAttacking was true even after Charged attack was complete.
+        /// Must be due to some inconsistency in AttackEnd and ClipEnd anim callbacks.
+        /// </summary>
+        private IEnumerator ChargedAttackErrorHandler()
+        {
+            yield return new WaitForSeconds(2.5f);    // this number should be greater than the ChargedAttack clip's duration.
             if (_isChargedAttacking)
                 _isChargedAttacking = false;
         }
