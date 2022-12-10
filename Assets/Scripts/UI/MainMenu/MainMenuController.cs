@@ -4,17 +4,34 @@ using UnityEngine;
 
 public class MainMenuController : Singleton<MainMenuController>
 {
-    [SerializeField] private GameObject[] m_RaftsInScene;
-    public int ActiveRaft = 1;
+    [SerializeField] private RaftObjectMap[] m_RaftsInScene;
 
-    public void OnRaftChange(int index)
+    private readonly Dictionary<RaftType, GameObject> _raftMap = new Dictionary<RaftType, GameObject>();
+
+    protected override void Start()
     {
-        ActiveRaft = index;
-        foreach (GameObject raft in m_RaftsInScene)
+        base.Start();
+        foreach (RaftObjectMap item in m_RaftsInScene)
         {
-            raft.SetActive(false);
+            _raftMap.Add(item.Type, item.Object);
+        }
+    }
+
+    public void OnRaftChange(RaftType type)
+    {
+        GameManager.Instance.ActiveRaft = type;
+        foreach (KeyValuePair<RaftType, GameObject> item in _raftMap)
+        {
+            item.Value.SetActive(false);
         }
 
-        m_RaftsInScene[index - 1].SetActive(true);
+        _raftMap[type].SetActive(true);
     }
+}
+
+[System.Serializable]
+public class RaftObjectMap
+{
+    public RaftType Type;
+    public GameObject Object;
 }

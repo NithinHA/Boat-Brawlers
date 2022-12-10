@@ -27,12 +27,17 @@ namespace UI.Screens
             Hide();
         }
 
-        public void OnClick_SelectRaft(int index)
+        public void OnClick_SelectRaft(int type)
         {
-            MainMenuController.Instance.OnRaftChange(index);
+            MainMenuController.Instance.OnRaftChange((RaftType) type);
             OnClick_Back();
         }
 
 #endregion
     }
+}
+
+public enum RaftType
+{
+    Simple, Seafaring
 }

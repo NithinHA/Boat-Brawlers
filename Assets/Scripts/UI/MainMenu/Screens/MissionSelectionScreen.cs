@@ -27,11 +27,16 @@ namespace UI.Screens
             Hide();
         }
         
-        public void OnClick_SelectMission(int index)
+        public void OnClick_SelectMission(int type)
         {
-            MainMenuUI.Instance.LoadMission(index);
+            MainMenuUI.Instance.LoadMission((LevelNames) type);
         }
         
 #endregion
     }
+}
+
+public enum LevelNames
+{
+    Level_1 = 1, Level_2 = 2
 }

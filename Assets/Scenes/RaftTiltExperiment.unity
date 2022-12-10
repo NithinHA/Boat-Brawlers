@@ -780,6 +780,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Simple Raft
       objectReference: {fileID: 0}
+    - target: {fileID: 8405511893907573943, guid: 1880231a0899748f491b58641276ec40,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1880231a0899748f491b58641276ec40, type: 3}
 --- !u!1 &1729853267

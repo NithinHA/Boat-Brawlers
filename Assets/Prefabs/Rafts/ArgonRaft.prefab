@@ -304,6 +304,7 @@ MonoBehaviour:
   m_TailScaleMultiplier: 0.4
   m_HeadDisplacementMultiplier: 1.25
   m_Range: {x: 0.5, y: 1}
+  m_RaftT: {fileID: 8837188091589339312}
 --- !u!1 &78468695366975541
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,7 +842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8837188091589339312}
   - component: {fileID: 8837188091589339314}
-  - component: {fileID: 8837188091589339315}
+  - component: {fileID: 481109380}
   m_Layer: 0
   m_Name: ArgonRaft
   m_TagString: Raft
@@ -884,7 +885,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 32
   m_CollisionDetection: 0
---- !u!114 &8837188091589339315
+--- !u!114 &481109380
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -893,13 +894,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8837188091589339313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9acc0c4e34344f4aa8cea71f0bc0d3e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ebd93e9af668444fb9cffda05a5c0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PersistentOnSceneChange: 0
   m_WeightMultiplier: 0.4
+  m_InstantneousForceMultiplier: 20
   m_MovementThreshold: 0
-  m_TumbleThreshold: {x: 30, y: 330}
+  m_TumbleThreshold: 30
   m_Rb: {fileID: 8837188091589339314}
   m_Pivot: {fileID: 8837188091589339312}
   m_Indicator: {fileID: 2100912726}

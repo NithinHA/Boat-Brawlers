@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BallBehaviour : MonoBehaviour
 {
+    public float Weight = 1f;
+
     private void Start()
     {
         Destroy(this.gameObject, 5f);
@@ -14,7 +16,7 @@ public class BallBehaviour : MonoBehaviour
     {
         if (other.CompareTag(Constants.Tags.RAFT))
         {
-            RaftController_Custom.Instance.AddInstantaneousForce(transform.position, 1);
+            RaftController_Custom.Instance.AddInstantaneousForce(transform.position, Weight);
             Destroy(this.gameObject);
         }
     }

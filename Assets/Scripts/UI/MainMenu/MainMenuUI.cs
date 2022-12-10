@@ -36,23 +36,9 @@ namespace UI
         /// <summary>
         /// temporary.. irrespective of mission index, loads level based on Boat selected.
         /// </summary>
-        /// <param name="index"></param>
-        public void LoadMission(int index)
+        public void LoadMission(LevelNames type)
         {
-            index = MainMenuController.Instance.ActiveRaft;
-            string levelName = String.Empty;
-            switch (index)
-            {
-                case 1: levelName = Constants.SceneNames.Level_1;
-                    break;
-                case 2: levelName = Constants.SceneNames.Level_2;
-                    break;
-                default:
-                    Debug.LogError("Invalid scene index " + index);
-                    break;
-            }
-
-            SceneManager.LoadScene(levelName);
+            SceneManager.LoadScene(type.ToString());
         }
 
 #region Button OnClicks

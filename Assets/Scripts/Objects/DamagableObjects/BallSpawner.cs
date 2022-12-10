@@ -8,6 +8,7 @@ public class BallSpawner : MonoBehaviour
 {
     [SerializeField] private Transform[] m_SpawnPoints;
     [SerializeField] private float m_SpawnDelay = 4f;
+    [SerializeField] private float m_BallWeights = 1f;
 
     private float _timeSinceLastSpawn = 0;
 
@@ -36,10 +37,13 @@ public class BallSpawner : MonoBehaviour
         ball.transform.position = sp.position;
         ball.transform.parent = transform;
         ball.transform.localScale = Vector3.one * .5f;
+
         ball.AddComponent<Rigidbody>();
         SphereCollider col = ball.AddComponent<SphereCollider>();
         col.isTrigger = true;
-        ball.AddComponent<BallBehaviour>();
+
+        BallBehaviour ballBehaviour = ball.AddComponent<BallBehaviour>();
+        ballBehaviour.Weight = m_BallWeights;
     }
 
     private void OnDrawGizmos()
