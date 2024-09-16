@@ -1073,6 +1073,7 @@ MonoBehaviour:
   PersistentOnSceneChange: 0
   m_MenuCam: {fileID: 471744342}
   m_PlayerCam: {fileID: 1510775089}
+  m_RaftSelectionCam: {fileID: 1510775089}
   MainMenuScreen: {fileID: 240310166}
   RaftSelectionScreen: {fileID: 1100641423}
   MissionSelectionScreen: {fileID: 1843531333}

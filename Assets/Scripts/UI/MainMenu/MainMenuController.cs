@@ -1,22 +1,41 @@
-using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
+using Cinemachine;
 using UnityEngine;
 
 public class MainMenuController : Singleton<MainMenuController>
 {
-    [SerializeField] private RaftObjectMap[] m_RaftsInScene;
+    [SerializeField] private SerializedDictionary<RaftType, GameObject> _raftMap = new SerializedDictionary<RaftType, GameObject>();
+    [SerializeField] private SerializedDictionary<WeaponType, GameObject> m_WeaponMap = new SerializedDictionary<WeaponType, GameObject>();
 
-    private readonly Dictionary<RaftType, GameObject> _raftMap = new Dictionary<RaftType, GameObject>();
-
+    public CinemachineVirtualCamera MenuCam;
+    public CinemachineVirtualCamera PlayerCam;
+    public CinemachineVirtualCamera RaftSelectionCam;
+    public CinemachineVirtualCamera WeaponSelectionCam;
+    
     protected override void Start()
     {
-        base.Start();
-        foreach (RaftObjectMap item in m_RaftsInScene)
-        {
-            _raftMap.Add(item.Type, item.Object);
-        }
+        MenuCameraSwitcher.SwitchCamera(MenuCam);
     }
 
+    private void OnEnable()
+    {
+        MenuCameraSwitcher.Register(MenuCam);
+        MenuCameraSwitcher.Register(PlayerCam);
+        MenuCameraSwitcher.Register(RaftSelectionCam);
+        MenuCameraSwitcher.Register(WeaponSelectionCam);
+    }
+
+    private void OnDisable()
+    {
+        MenuCameraSwitcher.Unregister(MenuCam);
+        MenuCameraSwitcher.Unregister(PlayerCam);
+        MenuCameraSwitcher.Unregister(RaftSelectionCam);
+        MenuCameraSwitcher.Unregister(WeaponSelectionCam);
+    }
+    
+#region Event listeners
+    
     public void OnRaftChange(RaftType type)
     {
         GameManager.Instance.ActiveRaft = type;
@@ -27,11 +46,17 @@ public class MainMenuController : Singleton<MainMenuController>
 
         _raftMap[type].SetActive(true);
     }
-}
 
-[System.Serializable]
-public class RaftObjectMap
-{
-    public RaftType Type;
-    public GameObject Object;
+    public void OnWeaponChange(WeaponType type)
+    {
+        GameManager.Instance.SelectedWeapon = type;
+        foreach (KeyValuePair<WeaponType, GameObject> item in m_WeaponMap)
+        {
+            item.Value.SetActive(false);
+        }
+
+        m_WeaponMap[type].SetActive(true);
+    }
+
+#endregion
 }

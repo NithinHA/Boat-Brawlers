@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,9 +9,7 @@ public class LevelManager : Singleton<LevelManager>
     public int LevelIndex;
     public bool IsGameEnded = false;
     public AudioManager m_AudioManagerPrefab;
-
-    [SerializeField] private RaftObjectMap[] m_RaftObjectMap;
-    private readonly Dictionary<RaftType, GameObject> _raftMap = new Dictionary<RaftType, GameObject>();
+    [SerializeField] private SerializedDictionary<RaftType, GameObject> _raftMap = new SerializedDictionary<RaftType, GameObject>();
 
     public Action<bool> OnGameEnd;
 
@@ -24,10 +22,9 @@ public class LevelManager : Singleton<LevelManager>
             audioManager.name = "AudioManager";
         }
 
-        foreach (RaftObjectMap item in m_RaftObjectMap)
+        foreach (var item in _raftMap)
         {
-            _raftMap.Add(item.Type, item.Object);
-            item.Object.SetActive(false);
+            item.Value.SetActive(false);
         }
 
         RaftType activeRaft = GameManager.Instance ? GameManager.Instance.ActiveRaft : RaftType.Simple;

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -28,6 +25,13 @@ namespace BaseObjects.Player
                 Debug.LogError("Multiple instances of Player exists!");
                 Destroy(this.gameObject);
             }
+
+            GameManager.Instance.PlayerMovementToggle += OnPlayerMovementToggle;
+        }
+
+        private void OnPlayerMovementToggle(bool active)
+        {
+            PlayerMovement.IsMovementEnabled = active;
         }
     }
 }
