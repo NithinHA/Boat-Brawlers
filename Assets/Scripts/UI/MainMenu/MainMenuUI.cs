@@ -1,6 +1,6 @@
-using System;
 using BaseObjects.Player;
 using Cinemachine;
+using UI.Interaction;
 using UI.Screens;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,30 +9,31 @@ namespace UI
 {
     public class MainMenuUI : Singleton<MainMenuUI>
     {
-        [SerializeField] private CinemachineVirtualCamera m_MenuCam;
-        [SerializeField] private CinemachineVirtualCamera m_PlayerCam;
-        [Space]
         public RectTransform MainMenuScreen;
+        public FloatingJoystick FloatingJoystick;
+        [Space]
+        public WeaponSelectionScreen WeaponSelectionScreen;
         public RaftSelectionScreen RaftSelectionScreen;
         public MissionSelectionScreen MissionSelectionScreen;
+        [Space]
+        public InteractionBubblesController InteractionBubblesController;
 
         protected override void Start()
         {
-            MenuCameraSwitcher.SwitchCamera(m_MenuCam);
+            base.Start();
+            GameManager.Instance.PlayerMovementToggle?.Invoke(false);
+            MenuCameraSwitcher.SwitchCamera(MainMenuController.Instance.MenuCam);
+            GameManager.Instance.PlayerMovementToggle += OnPlayerMovementToggle;
         }
 
-        private void OnEnable()
+        protected override void OnDestroy()
         {
-            MenuCameraSwitcher.Register(m_MenuCam);
-            MenuCameraSwitcher.Register(m_PlayerCam);
+            base.OnDestroy();
+
+            if (GameManager.Instance != null)
+                GameManager.Instance.PlayerMovementToggle -= OnPlayerMovementToggle;
         }
 
-        private void OnDisable()
-        {
-            MenuCameraSwitcher.Unregister(m_MenuCam);
-            MenuCameraSwitcher.Unregister(m_PlayerCam);
-        }
-        
         /// <summary>
         /// temporary.. irrespective of mission index, loads level based on Boat selected.
         /// </summary>
@@ -45,23 +46,14 @@ namespace UI
 
         public void OnClick_Play()
         {
-            if (MenuCameraSwitcher.ActiveCamera == m_MenuCam)
-            {
-                MenuCameraSwitcher.SwitchCamera(m_PlayerCam);
-                MainMenuScreen.gameObject.SetActive(false);
-            }
-
-            Player.Instance.PlayerMovement.IsMovementEnabled = true;
+            MenuCameraSwitcher.SwitchCamera(MainMenuController.Instance.PlayerCam);
+            MainMenuScreen.gameObject.SetActive(false);
+            GameManager.Instance.PlayerMovementToggle?.Invoke(true);
         }
 
         public void OnClick_Quit()
         {
             Application.Quit();
-        }
-
-        public void OnClick_RaftScreen()
-        {
-            RaftSelectionScreen.Show();
         }
 
         public void OnClick_MissionScreen()
@@ -70,6 +62,13 @@ namespace UI
         }
 
 #endregion
+
+
+        private void OnPlayerMovementToggle(bool active)
+        {
+            FloatingJoystick.gameObject.SetActive(active);
+        }
+
 
     }
 }

@@ -12,7 +12,9 @@ namespace BaseObjects.Player
         [SerializeField] private float m_MaxSpeed = 5f;
         [SerializeField] private LayerMask m_AimLayerMask;
         [SerializeField] private Joystick m_FloatingJoystick;
-        [SerializeField] private Transform m_CameraHolder;
+        [Space]
+        [SerializeField] private ParticleSystem m_RunParticles;
+        [SerializeField] private bool _isPlayerMoving = false;
 
         [Header("AB test")]
         [SerializeField] private bool m_AimAlwaysForward = true;
@@ -26,8 +28,6 @@ namespace BaseObjects.Player
         private void Awake()
         {
             mMainCam = Camera.main;
-            if (m_CameraHolder == null && mMainCam != null) 
-                m_CameraHolder = mMainCam.transform.GetComponentInParent<CameraHolder>().transform;
             if (m_FloatingJoystick == null)
                 m_FloatingJoystick = FindObjectOfType<Joystick>();
 
@@ -50,7 +50,11 @@ namespace BaseObjects.Player
         private void Update()
         {
             if (!IsMovementEnabled)
+            {
+                if (_isPlayerMoving)
+                    TogglePlayerMovementBoolean(false);
                 return;
+            }
 
             if(m_AimAlwaysForward)
                 AimForward();
@@ -72,8 +76,8 @@ namespace BaseObjects.Player
             // }
 
             mPlayerMovement = new Vector3(playerInputX, 0, playerInputY);
-            float angleDiff = m_CameraHolder.localRotation.eulerAngles.y;
-            mPlayerMovement = Quaternion.AngleAxis(angleDiff, Vector3.up) * mPlayerMovement;
+            // float angleDiff = 0;
+            // mPlayerMovement = Quaternion.AngleAxis(angleDiff, Vector3.up) * mPlayerMovement;     // This handles input correction if the camera has a certain initial Y rotation.
 
             float velocityZ = Vector3.Dot(mPlayerMovement.normalized, transform.forward);
             float velocityX = Vector3.Dot(mPlayerMovement.normalized, transform.right);
@@ -86,12 +90,19 @@ namespace BaseObjects.Player
         {
             if (!IsMovementEnabled)
                 return;
-            
+
             if (mPlayerMovement.magnitude > 0)
             {
                 mPlayerMovement.Normalize();
                 mPlayerMovement *= _curSpeed * Time.deltaTime;
                 m_Player.Rb.MovePosition(transform.position + mPlayerMovement);
+                if (!_isPlayerMoving)
+                    TogglePlayerMovementBoolean(true);
+            }
+            else
+            {
+                if (_isPlayerMoving)
+                    TogglePlayerMovementBoolean(false);
             }
         }
 
@@ -113,6 +124,18 @@ namespace BaseObjects.Player
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(mPlayerMovement.normalized), .1f);
             }
+        }
+
+        private void TogglePlayerMovementBoolean(bool active)
+        {
+            m_Player.Anim.SetFloat(Constants.Animation.VELOCITY_Z, 0, .1f, Time.deltaTime);
+            m_Player.Anim.SetFloat(Constants.Animation.VELOCITY_X, 0, .1f, Time.deltaTime);
+            Debug.Log($"=> Toggled player movement: {active}");
+            _isPlayerMoving = active;
+            if (active)
+                m_RunParticles.Play();
+            else
+                m_RunParticles.Stop();
         }
 
 #region Event listeners

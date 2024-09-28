@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using AYellowpaper.SerializedCollections;
+using DG.Tweening;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,9 +12,8 @@ public class LevelManager : Singleton<LevelManager>
     public int LevelIndex;
     public bool IsGameEnded = false;
     public AudioManager m_AudioManagerPrefab;
-
-    [SerializeField] private RaftObjectMap[] m_RaftObjectMap;
-    private readonly Dictionary<RaftType, GameObject> _raftMap = new Dictionary<RaftType, GameObject>();
+    [SerializeField] private SerializedDictionary<RaftType, GameObject> _raftMap = new SerializedDictionary<RaftType, GameObject>();
+    [SerializeField] private SerializedDictionary<WeaponType, GameObject> _weaponMap = new SerializedDictionary<WeaponType, GameObject>();
 
     public Action<bool> OnGameEnd;
 
@@ -24,12 +26,13 @@ public class LevelManager : Singleton<LevelManager>
             audioManager.name = "AudioManager";
         }
 
-        foreach (RaftObjectMap item in m_RaftObjectMap)
+        foreach (var item in _raftMap)
         {
-            _raftMap.Add(item.Type, item.Object);
-            item.Object.SetActive(false);
+            item.Value.SetActive(false);
         }
 
+        EnableRaft();
+        EnableWeapon();
         RaftType activeRaft = GameManager.Instance ? GameManager.Instance.ActiveRaft : RaftType.Simple;
         _raftMap[activeRaft].SetActive(true);
         AudioManager.Instance.PlaySound(Constants.SoundNames.OCEAN_BG);
@@ -42,9 +45,11 @@ public class LevelManager : Singleton<LevelManager>
             AudioManager.Instance.StopSound(Constants.SoundNames.OCEAN_BG);
     }
 
-    public void GameWon()
+    public async void GameWon()
     {
         IsGameEnded = true;
+        MenuCameraSwitcher.SwitchCamera(CameraHolder.Instance.LevelWin);
+        await Task.Delay(2000);
         InGameUI.Instance.OnGameWin();
         OnGameEnd?.Invoke(true);
     }
@@ -64,5 +69,27 @@ public class LevelManager : Singleton<LevelManager>
     public void RetryLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void EnableRaft()
+    {
+        foreach (KeyValuePair<RaftType, GameObject> item in _raftMap)
+        {
+            item.Value.SetActive(false);
+        }
+        _raftMap[GameManager.Instance.ActiveRaft].SetActive(true);
+    }
+
+    private void EnableWeapon()
+    {
+        foreach (KeyValuePair<WeaponType, GameObject> item in _weaponMap)
+        {
+            if(item.Value != null)
+                item.Value.SetActive(false);
+        }
+
+        GameObject selectedWeapon = _weaponMap[GameManager.Instance.SelectedWeapon];
+        if (selectedWeapon != null)
+            selectedWeapon.SetActive(true);
     }
 }
