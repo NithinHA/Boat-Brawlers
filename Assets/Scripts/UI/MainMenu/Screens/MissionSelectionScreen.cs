@@ -20,5 +20,5 @@ namespace UI.Screens
 
 public enum LevelNames
 {
-    Level_1 = 1, Level_2 = 2
+    RuggedBoulderIsle = 1
 }

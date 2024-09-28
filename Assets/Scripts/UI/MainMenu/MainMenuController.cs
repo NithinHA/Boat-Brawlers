@@ -15,6 +15,7 @@ public class MainMenuController : Singleton<MainMenuController>
     
     protected override void Start()
     {
+        base.Start();
         MenuCameraSwitcher.SwitchCamera(MenuCam);
     }
 

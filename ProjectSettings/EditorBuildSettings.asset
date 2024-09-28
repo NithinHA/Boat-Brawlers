@@ -12,9 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu_new.unity
     guid: 509e3bd3a936b40b49aec822fd1517cc
   - enabled: 1
-    path: Assets/Scenes/Levels/Level_1.unity
+    path: Assets/Scenes/Levels/RuggedBoulderIsle.unity
     guid: 2c881e12c1df14fa98e5c3b4e130645a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Levels/Level_2 (legacy).unity
     guid: dc5fe57c36a46433ba1eccd795a081d1
   m_configObjects: {}
