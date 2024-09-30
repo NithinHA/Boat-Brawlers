@@ -3101,9 +3101,9 @@ MonoBehaviour:
   m_MoveThreshold: 0.5
   PlayerCam: {fileID: 1328148732}
   LevelWin: {fileID: 1445423429}
-  _dur: 0
-  _intn: 0
-  _freq: 0
+  _testDuration: 0
+  _testIntensity: 0
+  _testFrequency: 0
 --- !u!114 &1494007715
 MonoBehaviour:
   m_ObjectHideFlags: 0

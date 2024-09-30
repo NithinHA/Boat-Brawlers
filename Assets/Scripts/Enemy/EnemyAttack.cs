@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using BaseObjects.Player;
 using UnityEngine;
 
 namespace BaseObjects.Enemy
@@ -11,6 +8,7 @@ namespace BaseObjects.Enemy
         [SerializeField] private Enemy m_Enemy;
         [SerializeField] private GameObject m_EnemyHitbox;
         [SerializeField] private float m_HitKnockbackForce = 20f;
+        [SerializeField] private ParticleSystem m_DamageParticles;
         [SerializeField] private GameObject m_GroundImpactParticles;
         [SerializeField] private float m_CamShakeEnemyKnockbackMultiplier = .05f;
 
@@ -42,6 +40,9 @@ namespace BaseObjects.Enemy
         {
             // push back
             m_Enemy.Rb.AddForce(knockbackDirection * amount * m_HitKnockbackForce);
+            // particles
+            m_DamageParticles.gameObject.SetActive(true);
+            m_DamageParticles.Play();
             // camera shake
             float intensity = Player.Player.Instance.PlayerAttack.CurrentDamageAmount * m_CamShakeEnemyKnockbackMultiplier;
             CameraHolder.Instance.TriggerCameraShake(.2f, intensity, .15f);

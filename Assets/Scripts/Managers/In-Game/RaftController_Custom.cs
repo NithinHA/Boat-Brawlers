@@ -90,7 +90,7 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
             _resultant += weight;
         }
 
-        if (_resultant.sqrMagnitude > Mathf.Pow(m_ResultantMaxMagnitude, 2))      // perform clamping
+        if (_resultant.magnitude > m_ResultantMaxMagnitude)      // perform clamping
             _resultant = Vector3.Normalize(_resultant) * m_ResultantMaxMagnitude;
     }
 
