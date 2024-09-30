@@ -73,7 +73,11 @@ namespace BaseObjects.Player
             DOTween.To(() => m_Player.Rig.weight, x => m_Player.Rig.weight = x, 0, .01f);
             item.Drop();
             OnItemDropped?.Invoke(item);
-            DOVirtual.DelayedCall(.5f, () => AudioManager.Instance.PlaySound(Constants.SoundNames.ITEM_DROP));
+            DOVirtual.DelayedCall(.4f, () =>
+            {
+                AudioManager.Instance.PlaySound(Constants.SoundNames.ITEM_DROP);
+                CameraHolder.Instance.TriggerCameraShake(.25f, 1.2f, .2f);
+            });
         }
 
         private void AlignPivotAndHandPositions(Transform pivot, InteractableObject item)

@@ -45,13 +45,12 @@ public class LevelManager : Singleton<LevelManager>
             AudioManager.Instance.StopSound(Constants.SoundNames.OCEAN_BG);
     }
 
-    public async void GameWon()
+    public void GameWon()
     {
         IsGameEnded = true;
         MenuCameraSwitcher.SwitchCamera(CameraHolder.Instance.LevelWin);
-        await Task.Delay(2000);
-        InGameUI.Instance.OnGameWin();
-        OnGameEnd?.Invoke(true);
+        DOVirtual.DelayedCall(2f, () => OnGameEnd?.Invoke(true))    // Wait for Camera to switch from gameplay to post-play.
+            .OnComplete(() => DOVirtual.DelayedCall(1f, InGameUI.Instance.OnGameWin));      // Wait for character victory animation.
     }
 
     public void GameLost()

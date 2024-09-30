@@ -11,6 +11,7 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
 {
     [SerializeField] private float m_WeightMultiplier = .1f;
     [SerializeField] private float m_InstantneousForceMultiplier = 50f;
+    [SerializeField] private float m_ResultantMaxMagnitude = 5f;        // if the resultant force on the Raft is greater than this number, it gets clamped to this value.
     [Space]
     [SerializeField] private float m_MovementThreshold = 0f;
     [SerializeField] private float m_TumbleThreshold = 30;
@@ -88,6 +89,9 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
             weight.y = 0;
             _resultant += weight;
         }
+
+        if (_resultant.sqrMagnitude > Mathf.Pow(m_ResultantMaxMagnitude, 2))      // perform clamping
+            _resultant = Vector3.Normalize(_resultant) * m_ResultantMaxMagnitude;
     }
 
     private void PerformTilting()
@@ -120,7 +124,8 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
 
             m_Rb.isKinematic = false;
             Debug.Log("DIEDED! (" + localRot180 + ")");
-            CameraShake.ShakeOnce(m_CamShakeOnGameOver.x, m_CamShakeOnGameOver.y);
+            CameraHolder.Instance.TriggerCameraShake(.8f, 1, .2f);
+            CameraHolder.Instance.PlayerCam.Follow = null;
             AudioManager.Instance.StopSound(Constants.SoundNames.RAFT_BG);
             AudioManager.Instance.PlaySound(Constants.SoundNames.RAFT_FALL);
             DOVirtual.DelayedCall(1f, () => AudioManager.Instance.PlaySound(Constants.SoundNames.RAFT_SINK));

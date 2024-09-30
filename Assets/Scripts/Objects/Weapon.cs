@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 namespace BaseObjects
@@ -40,6 +39,17 @@ namespace BaseObjects
             return m_AttackVariants[Utilities.GetWeightedRandomIndex(_variantWeights)];
         }
 
+        public void OnHeavyAttack(GameObject particles)
+        {
+            Transform hitT = HeavyAttackAnimInfo.HitboxInfo.Hitboxes[0].transform;
+            RaftController_Custom.Instance.AddInstantaneousForce(hitT.position, 1f);
+            DOVirtual.DelayedCall(.05f, () =>
+            {
+                Vector3 pos = hitT.position;
+                Instantiate(particles, pos, Quaternion.identity);
+            });
+        }
+
         // public HitboxInfo GetHitboxInfoForAttackIndex(int index)
         // {
         //     return m_AnimWeightHitboxMap[index].HitboxInfo;
@@ -49,6 +59,7 @@ namespace BaseObjects
         // {
         //     return false;
         // }
+
     }
 
     public enum WeaponType

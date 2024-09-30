@@ -130,7 +130,6 @@ namespace BaseObjects.Player
         {
             m_Player.Anim.SetFloat(Constants.Animation.VELOCITY_Z, 0, .1f, Time.deltaTime);
             m_Player.Anim.SetFloat(Constants.Animation.VELOCITY_X, 0, .1f, Time.deltaTime);
-            Debug.Log($"=> Toggled player movement: {active}");
             _isPlayerMoving = active;
             if (active)
                 m_RunParticles.Play();

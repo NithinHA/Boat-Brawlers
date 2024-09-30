@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using BaseObjects.Player;
-using Unity.Mathematics;
 
 namespace BaseObjects.Enemy
 {
@@ -19,7 +15,7 @@ namespace BaseObjects.Enemy
         [SerializeField] private float m_FailedToLandDestroyTimer = 4f;
 
         [Header("Refs")]
-        [SerializeField] private GameObject m_ChargingParticlesPrefab;
+        [SerializeField] private ParticleSystem m_ChargingParticles;
         [SerializeField] private GameObject m_DeathParticlesPrefab;         // make sure auto destroy is enabled for this
         [Space]
         [SerializeField] internal Animator Anim;
@@ -32,7 +28,7 @@ namespace BaseObjects.Enemy
         
         private float _leapTimer;
         private Sequence _chargingSequence = null;
-        private GameObject _chargingParticles;
+        // private GameObject _chargingParticles;
         private float _timeSinceSpawn;
 
         public enum EnemyState
@@ -97,17 +93,10 @@ namespace BaseObjects.Enemy
                     
                     Quaternion lookRotation = GetRotationToPlayer();
                     _chargingSequence = DOTween.Sequence();
-                    _chargingParticles = Instantiate(m_ChargingParticlesPrefab, transform.position, Quaternion.identity);   // create charging particles
+                    m_ChargingParticles.gameObject.SetActive(true);
                     _chargingSequence.Append(transform.DORotateQuaternion(lookRotation, m_DirectTowardsPlayerDelay))
                         .AppendInterval(.5f)
-                        .AppendCallback(() =>
-                        {
-                            if (_chargingParticles != null)
-                            {
-                                Destroy(_chargingParticles);
-                                _chargingParticles = null;
-                            }
-                        })
+                        .AppendCallback(() => m_ChargingParticles.gameObject.SetActive(false))
                         .AppendCallback(Attack);
                     break;
             }
@@ -195,11 +184,9 @@ namespace BaseObjects.Enemy
             if (_chargingSequence != null)
                 _chargingSequence.Kill();
 
-            if (_chargingParticles != null)
-            {
-                Destroy(_chargingParticles);
-                _chargingParticles = null;
-            }
+            if (m_ChargingParticles.gameObject.activeSelf)
+                m_ChargingParticles.gameObject.SetActive(false);
+
             ChangeState(EnemyState.Idle);
         }
 

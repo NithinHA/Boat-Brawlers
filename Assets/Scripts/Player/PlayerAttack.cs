@@ -34,9 +34,12 @@ namespace BaseObjects.Player
         [Header("Damage info")]
         [SerializeField] private float m_HitKnockbackForce = 400f;
         [SerializeField] private float m_DefaultDamageCooldownTime = 4f;
-        [SerializeField] private GameObject m_GroundImpactParticles;
         [SerializeField] private Vector2 m_CamShakePlayerFall = new Vector2(.5f, 1.5f);
 
+        [Header("Particles")]
+        [SerializeField] private GameObject m_GroundImpactParticles;
+        [SerializeField] private GameObject m_HeavyAttachParticles;
+        
         private float _damageCooldownTimer = 0f;
         private bool _isPlayingDamageAnim = false;
         private float _cachedRigWeight;
@@ -177,7 +180,8 @@ namespace BaseObjects.Player
             // play damage fx
             m_Player.PlayerMovement.IsMovementEnabled = false;
             m_Player.PlayerInteraction.IsInteractionEnabled = false;
-            CameraShake.ShakeOnce(m_CamShakePlayerFall.x, m_CamShakePlayerFall.y);
+            CameraHolder.Instance.TriggerCameraShake(.3f, 2f, .2f);
+            TakeDamageEffect.Instance.TakeDamage();
 
             // push back
             m_Player.Rb.AddForce(knockbackDirection * m_HitKnockbackForce);
@@ -241,8 +245,8 @@ namespace BaseObjects.Player
         public void AnimEvent_HeavyAttackImpact()
         {
             AudioManager.Instance.PlaySound(Constants.SoundNames.HAMMER_SMASH);
-            // play particles impact
-            RaftController_Custom.Instance.AddInstantaneousForce(_heldWeapon.transform.position, 1f);
+            CameraHolder.Instance.TriggerCameraShake(.3f, 2f, .2f);
+            _heldWeapon.OnHeavyAttack(m_HeavyAttachParticles);
         }
 
         public void AnimEvent_AttackEnd()
@@ -291,7 +295,7 @@ namespace BaseObjects.Player
             Instantiate(m_GroundImpactParticles, transform.position, Quaternion.identity);
             AudioManager.Instance.PlaySound(Constants.SoundNames.PLAYER_FALL);
             // camera shake
-            CameraShake.ShakeOnce(m_CamShakePlayerFall.x, m_CamShakePlayerFall.y);
+            CameraHolder.Instance.TriggerCameraShake(.3f, 2, .2f);
             
             m_Player.PlayerInteraction.IsInteractionEnabled = true;
             m_Player.PlayerInteraction.DropItem();              // Instantaneously allow player to Drop the item and disable PlayerInteractions.

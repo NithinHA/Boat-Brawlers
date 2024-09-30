@@ -43,8 +43,8 @@ namespace BaseObjects.Enemy
             // push back
             m_Enemy.Rb.AddForce(knockbackDirection * amount * m_HitKnockbackForce);
             // camera shake
-            float shakeSpeed = Player.Player.Instance.PlayerAttack.CurrentDamageAmount * m_CamShakeEnemyKnockbackMultiplier;
-            CameraShake.ShakeOnce(.5f, shakeSpeed);
+            float intensity = Player.Player.Instance.PlayerAttack.CurrentDamageAmount * m_CamShakeEnemyKnockbackMultiplier;
+            CameraHolder.Instance.TriggerCameraShake(.2f, intensity, .15f);
             // play particles
             if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)
             {

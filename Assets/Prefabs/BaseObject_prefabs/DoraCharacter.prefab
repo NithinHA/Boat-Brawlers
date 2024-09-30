@@ -744,7 +744,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   m_FloatingJoystick: {fileID: 0}
-  m_CameraHolder: {fileID: 0}
   m_RunParticles: {fileID: 1102797967270936093}
   _isPlayerMoving: 0
   m_AimAlwaysForward: 1
@@ -810,9 +809,11 @@ MonoBehaviour:
   _currentComboIndex: 0
   m_HitKnockbackForce: 200
   m_DefaultDamageCooldownTime: 4
-  m_GroundImpactParticles: {fileID: 6631908133778494888, guid: 3f7185f4d842044179026be06ff2adb8,
-    type: 3}
   m_CamShakePlayerFall: {x: 0.5, y: 1.5}
+  m_GroundImpactParticles: {fileID: 545229049217769480, guid: 638fcc6056f914988b0ee9569e55cd69,
+    type: 3}
+  m_HeavyAttachParticles: {fileID: 5393333421219083128, guid: 65c82a9f79b7c481a8bf98e4a5159165,
+    type: 3}
 --- !u!1 &1853687250398477494
 GameObject:
   m_ObjectHideFlags: 0

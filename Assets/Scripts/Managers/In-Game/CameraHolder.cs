@@ -10,8 +10,6 @@ public class CameraHolder : Singleton<CameraHolder>
     [Header("Virtual cams")]
     public CinemachineVirtualCamera PlayerCam;
     public CinemachineVirtualCamera LevelWin;
-    [Header("Camera shake")]
-    [SerializeField] private float shakeDuration = 0.5f;
     
     private CinemachineBasicMultiChannelPerlin _noise;
     private float _shakeTimer;
@@ -35,9 +33,22 @@ public class CameraHolder : Singleton<CameraHolder>
         MenuCameraSwitcher.Unregister(PlayerCam);
         MenuCameraSwitcher.Unregister(LevelWin);
     }
-    
+
+#if UNITY_EDITOR
+    [Header("test")]
+    public float _testDuration;
+    public float _testIntensity;
+    public float _testFrequency;
+#endif
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TriggerCameraShake(_testDuration, _testIntensity, _testFrequency);
+        }
+#endif
+
         HandleCamRotationX();
         HandleCameraShake();
     }
@@ -98,11 +109,11 @@ public class CameraHolder : Singleton<CameraHolder>
         }
     }
 
-    public void TriggerCameraShake(float intensity = 2, float frequency = 1)
+    public void TriggerCameraShake(float duration = .5f, float intensity = 2, float frequency = 1)
     {
         _noise.m_AmplitudeGain = intensity;
         _noise.m_FrequencyGain = frequency;
-        _shakeTimer = shakeDuration;
+        _shakeTimer = duration;
     }
 
 }
