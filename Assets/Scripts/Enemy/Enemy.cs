@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace BaseObjects.Enemy
 {
@@ -13,11 +14,11 @@ namespace BaseObjects.Enemy
         [Header("Health info")]
         [SerializeField] private float m_MaxHealth = 100f;
         [SerializeField] private float m_FailedToLandDestroyTimer = 4f;
-
         [Header("Refs")]
         [SerializeField] private ParticleSystem m_ChargingParticles;
         [SerializeField] private GameObject m_DeathParticlesPrefab;         // make sure auto destroy is enabled for this
         [Space]
+        [SerializeField] private Renderer m_Renderer;
         [SerializeField] internal Animator Anim;
         [SerializeField] internal Rigidbody Rb;
         [SerializeField] private EnemyAttack m_EnemyAttack;
@@ -39,7 +40,16 @@ namespace BaseObjects.Enemy
         public EnemyState CurrentState;
         public Action OnStateChange;
         public static Action<Enemy> OnEnemyDestroyed;
+        
+        private readonly string[] _impactSounds = { Constants.SoundNames.ENEMY_IMPACT, Constants.SoundNames.ENEMY_IMPACT_1 };
 
+#region Getters
+
+        public Renderer GetRenderer() => m_Renderer;
+        public LayerMask GetGroundLayer() => m_GroundLayer;
+
+#endregion
+        
 #region Unity callbacks
 
         protected override void Start()
@@ -78,7 +88,7 @@ namespace BaseObjects.Enemy
 
             if (transform.position.y < -5f)
             {
-                KillEnemy();
+                KillEnemy(EnemyDeathCause.Overboard);
             }
 
             switch (CurrentState)
@@ -158,12 +168,11 @@ namespace BaseObjects.Enemy
             Health -= amount;
             if (Health <= 0)
             {
-                KillEnemy();
-                AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_DEATH);      // play EnemyDeath effect only when killed by player on Raft.
+                KillEnemy(EnemyDeathCause.KIA);
                 return;
             }
 
-            AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_IMPACT);
+            AudioManager.Instance.PlaySound(_impactSounds[Random.Range(0, _impactSounds.Length)]);
             _leapTimer = m_NextLeapWaitTime;
             Anim.SetTrigger(Constants.Animation.DAMAGE);
 
@@ -171,11 +180,20 @@ namespace BaseObjects.Enemy
                 ResetFailedAttack();
         }
 
-        private void KillEnemy()
+        private void KillEnemy(EnemyDeathCause cause)
         {
             if (CurrentState == EnemyState.Charging)
                 ResetFailedAttack();
 
+            switch (cause)
+            {
+                case EnemyDeathCause.KIA:
+                    AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_DEATH);
+                    break;
+                case EnemyDeathCause.Overboard:
+                    AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_DEATH_OVERBOARD);
+                    break;
+            }
             Instantiate(m_DeathParticlesPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
@@ -185,7 +203,7 @@ namespace BaseObjects.Enemy
             if (_timeSinceSpawn < m_FailedToLandDestroyTimer)
                 _timeSinceSpawn += Time.deltaTime;
             else
-                KillEnemy();
+                KillEnemy(EnemyDeathCause.KIA);
         }
 
         private void ResetFailedAttack()
@@ -231,5 +249,10 @@ namespace BaseObjects.Enemy
         }
 
 #endregion
+    }
+
+    public enum EnemyDeathCause
+    {
+        KIA, Overboard
     }
 }

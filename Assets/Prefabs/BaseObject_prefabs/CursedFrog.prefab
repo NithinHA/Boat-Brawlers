@@ -326,6 +326,7 @@ MonoBehaviour:
   m_ChargingParticles: {fileID: 975919715044395472}
   m_DeathParticlesPrefab: {fileID: 7446039107676699914, guid: de1bfa616416d4666b3e22abf6824f99,
     type: 3}
+  m_Renderer: {fileID: 1248121432815705579}
   Anim: {fileID: 2717355628244242076}
   Rb: {fileID: 2717355628244242066}
   m_EnemyAttack: {fileID: 2717355628244242067}
@@ -349,11 +350,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Enemy: {fileID: 6479211294751119328}
   m_EnemyHitbox: {fileID: 6479211295518737201}
-  m_HitKnockbackForce: 8
+  m_HitKnockbackForce: 240
+  m_BlinkDuration: 0.5
   m_DamageParticles: {fileID: 1200454604520031327}
   m_GroundImpactParticles: {fileID: 545229049217769480, guid: 638fcc6056f914988b0ee9569e55cd69,
     type: 3}
-  m_CamShakeEnemyKnockbackMultiplier: 0.1
+  m_CamShakeEnemyKnockbackMultiplier: 5
 --- !u!1 &3760467328185994330
 GameObject:
   m_ObjectHideFlags: 0

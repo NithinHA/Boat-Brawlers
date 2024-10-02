@@ -771,18 +771,21 @@ MonoBehaviour:
         Hitboxes:
         - {fileID: 6172691433775294609}
         Radius: 0.5
+      CurrentDamageAmount: 30
     - ClipName: Kick_Reverse
       AnimIndex: 3
       HitboxInfo:
         Hitboxes:
         - {fileID: 6172691433775294609}
         Radius: 0.8
+      CurrentDamageAmount: 35
     - ClipName: Kick_Roundhouse
       AnimIndex: 2
       HitboxInfo:
         Hitboxes:
         - {fileID: 6172691433775294609}
         Radius: 0.8
+      CurrentDamageAmount: 35
     Weight: 1
   - AllAnimInfos:
     - ClipName: Kick_Side
@@ -791,20 +794,23 @@ MonoBehaviour:
         Hitboxes:
         - {fileID: 4396285029393329932}
         Radius: 0.5
+      CurrentDamageAmount: 30
     - ClipName: Kick_Roundhouse
       AnimIndex: 2
       HitboxInfo:
         Hitboxes:
         - {fileID: 6172691433775294609}
         Radius: 0.8
+      CurrentDamageAmount: 35
     - ClipName: Kick_Reverse
       AnimIndex: 3
       HitboxInfo:
         Hitboxes:
         - {fileID: 6172691433775294609}
         Radius: 0.8
+      CurrentDamageAmount: 35
     Weight: 1
-  m_SimpleAttackDamage: 25
+  m_SimpleAttackDamage: 35
   CurrentDamageAmount: 0
   _currentComboIndex: 0
   m_HitKnockbackForce: 200

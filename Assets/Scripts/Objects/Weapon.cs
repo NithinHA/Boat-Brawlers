@@ -7,7 +7,6 @@ namespace BaseObjects
     {
         [Header("Weapon info")]
         public float AttackCooldown = 1f;
-        public float Damage = 40f;
         public WeaponType Type;
         public int MaxComboIndex = 1;
         [SerializeField] private AtkAnimVariant[] m_AttackVariants;

@@ -424,7 +424,6 @@ MonoBehaviour:
   - {fileID: 2283392925981169323}
   - {fileID: 2283392925981169322}
   AttackCooldown: 1.5
-  Damage: 40
   Type: 1
   MaxComboIndex: 1
   m_AttackVariants:
@@ -435,18 +434,21 @@ MonoBehaviour:
         Hitboxes:
         - {fileID: 5085322736665212297}
         Radius: 1
+      CurrentDamageAmount: 40
     - ClipName: Hammer_Swing2
       AnimIndex: 2
       HitboxInfo:
         Hitboxes:
         - {fileID: 5085322736665212297}
         Radius: 1
+      CurrentDamageAmount: 40
     - ClipName: Hammer_Smash
       AnimIndex: 0
       HitboxInfo:
         Hitboxes:
         - {fileID: 5085322736665212297}
         Radius: 1.5
+      CurrentDamageAmount: 60
     Weight: 1
   HeavyAttackAnimInfo:
     ClipName: Hammer_Smash
@@ -455,6 +457,7 @@ MonoBehaviour:
       Hitboxes:
       - {fileID: 5085322736665212297}
       Radius: 1.3
+    CurrentDamageAmount: 60
 --- !u!1 &8979249989409233615
 GameObject:
   m_ObjectHideFlags: 0

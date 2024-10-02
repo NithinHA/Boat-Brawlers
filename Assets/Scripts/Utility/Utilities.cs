@@ -24,4 +24,12 @@ public class Utilities
 
         return index;
     }
+    
+    /// <summary>
+    /// Remaps the input values from the input range to the corresponding value in the output range. 
+    /// </summary>
+    public static float Remap(float input, Vector2 inputRange, Vector2 outputRange)
+    {
+        return (input - inputRange.x) * (outputRange.y - outputRange.x) / (inputRange.y - inputRange.x) + outputRange.x;
+    }
 }

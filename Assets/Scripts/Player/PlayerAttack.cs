@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using VFX;
 
 namespace BaseObjects.Player
 {
@@ -13,8 +15,6 @@ namespace BaseObjects.Player
         [SerializeField] private float m_DefaultAttackCooldownTime = .5f;
 
         [SerializeField] private AtkAnimVariant[] m_AttackVariants;
-        // [SerializeField] private AtkAnimInfo[] m_AnimWeightHitboxMap;
-        [SerializeField] private float m_SimpleAttackDamage = 20f;
 
         private float _attackCooldownTimer = 0f;
         private bool _canAttack = true;
@@ -23,6 +23,7 @@ namespace BaseObjects.Player
         private float[] _variantWeights;
         private List<GameObject> _playerHitboxes = new List<GameObject>();
         public float CurrentDamageAmount;
+        private float _defaultAttackDamage = 20f;
 
         // combo data
         private bool _isPerformingCombo = false;
@@ -34,7 +35,6 @@ namespace BaseObjects.Player
         [Header("Damage info")]
         [SerializeField] private float m_HitKnockbackForce = 400f;
         [SerializeField] private float m_DefaultDamageCooldownTime = 4f;
-        [SerializeField] private Vector2 m_CamShakePlayerFall = new Vector2(.5f, 1.5f);
 
         [Header("Particles")]
         [SerializeField] private GameObject m_GroundImpactParticles;
@@ -52,8 +52,6 @@ namespace BaseObjects.Player
             _variantWeights = new float[m_AttackVariants.Length];
             for (int i = 0; i < m_AttackVariants.Length; i++)
                 _variantWeights[i] = m_AttackVariants[i].Weight;
-
-            CurrentDamageAmount = m_SimpleAttackDamage;            // player starts barehanded
 
             m_Player.PlayerInteraction.OnItemPicked += OnItemPicked;
             m_Player.PlayerInteraction.OnItemDropped += OnItemDropped;
@@ -135,6 +133,16 @@ namespace BaseObjects.Player
             {
                 WeaponAttack(isChargedAttack);
             }
+
+            try
+            {
+                CurrentDamageAmount = _selectedComboVariant.AllAnimInfos[_currentComboIndex].CurrentDamageAmount;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                CurrentDamageAmount = _defaultAttackDamage;
+            }
         }
 
         private void SimpleAttack()
@@ -180,32 +188,31 @@ namespace BaseObjects.Player
             // play damage fx
             m_Player.PlayerMovement.IsMovementEnabled = false;
             m_Player.PlayerInteraction.IsInteractionEnabled = false;
-            CameraHolder.Instance.TriggerCameraShake(.3f, 2f, .2f);
+            CameraHolder.Instance.TriggerCameraShake(.3f, 3f, .2f);
             TakeDamageEffect.Instance.TakeDamage();
+
+            // frame freeze
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .1f);
 
             // push back
             m_Player.Rb.AddForce(knockbackDirection * m_HitKnockbackForce);
             m_Player.Anim.SetTrigger(Constants.Animation.DAMAGE);
-            
+
             _isPlayingDamageAnim = true;
             // resets
             ResetCombos();
         }
-
 
 #region Event lisetners
         
         private void OnItemPicked(InteractableObject obj)
         {
             _heldWeapon = obj as Weapon;
-            if (HasWeapon)
-                CurrentDamageAmount = _heldWeapon.Damage;
         }
 
         private void OnItemDropped(InteractableObject obj)
         {
             _heldWeapon = null;
-            CurrentDamageAmount = m_SimpleAttackDamage;
         }
 
 #endregion
@@ -245,8 +252,9 @@ namespace BaseObjects.Player
         public void AnimEvent_HeavyAttackImpact()
         {
             AudioManager.Instance.PlaySound(Constants.SoundNames.HAMMER_SMASH);
-            CameraHolder.Instance.TriggerCameraShake(.3f, 2f, .2f);
+            CameraHolder.Instance.TriggerCameraShake(.3f, 3f, .2f);
             _heldWeapon.OnHeavyAttack(m_HeavyAttachParticles);
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .15f);
         }
 
         public void AnimEvent_AttackEnd()
@@ -372,6 +380,7 @@ public class AtkAnimInfo
     public string ClipName;
     public int AnimIndex;
     public HitboxInfo HitboxInfo;
+    public float CurrentDamageAmount = 25;
 }
 
 [System.Serializable]

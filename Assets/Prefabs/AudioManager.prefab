@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6782964394635187538}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6782964394635187541
 MonoBehaviour:
@@ -82,10 +82,28 @@ MonoBehaviour:
     pitch: 1
     is_looping: 0
     source: {fileID: 0}
-  - name: EnemyDeath
-    clip: {fileID: 8300000, guid: d1a87b6521d0a461290865a3aa8c0db6, type: 3}
+  - name: EnemyImpact_1
+    clip: {fileID: 8300000, guid: fb61abb46bb86415cbb05d631e848160, type: 3}
     volume: 0.723
     pitch: 1
+    is_looping: 0
+    source: {fileID: 0}
+  - name: EnemyImpact_2
+    clip: {fileID: 8300000, guid: fb61abb46bb86415cbb05d631e848160, type: 3}
+    volume: 0.723
+    pitch: 1
+    is_looping: 0
+    source: {fileID: 0}
+  - name: EnemyDeath
+    clip: {fileID: 8300000, guid: 9ad2d10d4e36d4755a2ce1f44fdf1006, type: 3}
+    volume: 0.723
+    pitch: 1
+    is_looping: 0
+    source: {fileID: 0}
+  - name: EnemyDeathOverboard
+    clip: {fileID: 8300000, guid: 9ad2d10d4e36d4755a2ce1f44fdf1006, type: 3}
+    volume: 0.35
+    pitch: 1.3
     is_looping: 0
     source: {fileID: 0}
   - name: PlayerFall
@@ -130,3 +148,4 @@ MonoBehaviour:
     pitch: 1
     is_looping: 0
     source: {fileID: 0}
+  IsMuted: 0

@@ -40,8 +40,10 @@ public class TakeDamageEffect : Singleton<TakeDamageEffect>
 
     void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F))
             TakeDamage();
+#endif
         
         if (_isTakingDamage)
         {

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using VFX;
 
 namespace BaseObjects.Enemy
 {
@@ -7,15 +8,19 @@ namespace BaseObjects.Enemy
     {
         [SerializeField] private Enemy m_Enemy;
         [SerializeField] private GameObject m_EnemyHitbox;
-        [SerializeField] private float m_HitKnockbackForce = 20f;
+        [SerializeField] private Vector2 m_HitKnockbackRange = new Vector2(200, 350);
+        [SerializeField] private float m_BlinkDuration = .5f;
+        [Space]
         [SerializeField] private ParticleSystem m_DamageParticles;
         [SerializeField] private GameObject m_GroundImpactParticles;
-        [SerializeField] private float m_CamShakeEnemyKnockbackMultiplier = .05f;
+        [SerializeField] private Vector2 m_CamShakeEnemyKnockbackRange = new Vector2(3, 6);
 
         private Action _onAttackAnimComplete;
 
 #region Unity callbacks
 
+        private Vector3 _knockbackDir;
+        private float _knockbackMag;
         private void OnTriggerEnter(Collider other)
         {
             if (!m_Enemy.IsLanded)
@@ -23,9 +28,9 @@ namespace BaseObjects.Enemy
 
             if (other.CompareTag(Constants.Tags.PLAYER_ATTACK_HITBOX))
             {
-                Vector3 knockbackDirection = transform.position - Player.Player.Instance.transform.position;
-                knockbackDirection.y = 0;
-                TakeDamage(Player.Player.Instance.PlayerAttack.CurrentDamageAmount, knockbackDirection.normalized);
+                Vector3 knockBackDirection = GetCorrectedKnockBackDirection();
+                _knockbackDir = knockBackDirection.normalized;
+                TakeDamage(Player.Player.Instance.PlayerAttack.CurrentDamageAmount, knockBackDirection.normalized);
             }
         }
 
@@ -39,14 +44,22 @@ namespace BaseObjects.Enemy
         public void TakeDamage(float amount, Vector3 knockbackDirection)
         {
             // push back
-            m_Enemy.Rb.AddForce(knockbackDirection * amount * m_HitKnockbackForce);
+            float remappedValueForKnockbackMagnitude = Mathf.Clamp(Utilities.Remap(amount, new Vector2(0, 100), m_HitKnockbackRange),
+                m_HitKnockbackRange.x, m_HitKnockbackRange.y);
+            _knockbackMag = remappedValueForKnockbackMagnitude;
+            m_Enemy.Rb.AddForce(knockbackDirection * remappedValueForKnockbackMagnitude);
             // particles
             m_DamageParticles.gameObject.SetActive(true);
             m_DamageParticles.Play();
+            // perform cooldown
+            ObjectBlinkHandler.Instance.BlinkOnce(m_Enemy.GetRenderer(), Color.red, m_BlinkDuration, 20);
             // camera shake
-            float intensity = Player.Player.Instance.PlayerAttack.CurrentDamageAmount * m_CamShakeEnemyKnockbackMultiplier;
-            CameraHolder.Instance.TriggerCameraShake(.2f, intensity, .15f);
-            // play particles
+            float remappedValueForCameraShake = Mathf.Clamp(Utilities.Remap(amount, new Vector2(0, 100), m_CamShakeEnemyKnockbackRange),
+                    m_CamShakeEnemyKnockbackRange.x, m_CamShakeEnemyKnockbackRange.y);
+            Debug.Log($"=> camShake: {remappedValueForCameraShake}; knockback: {remappedValueForKnockbackMagnitude}");
+            CameraHolder.Instance.TriggerCameraShake(.2f, remappedValueForCameraShake, .15f);
+            // frame freeze
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .1f);
             if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)
             {
                 if(m_EnemyHitbox.activeSelf)
@@ -59,6 +72,17 @@ namespace BaseObjects.Enemy
             m_Enemy.OnTakeDamage(amount);
         }
 
+        /// <summary>
+        /// Returns the enemy knockback direction considering the plane angle.
+        /// </summary>
+        private Vector3 GetCorrectedKnockBackDirection()
+        {
+            Vector3 position = transform.position;
+            Vector3 knockBackDir = position - Player.Player.Instance.transform.position;    // cur_pos - player_pos = base knockback direction
+            return Physics.Raycast(position, Vector3.down, out var hit, 1f, m_Enemy.GetGroundLayer())
+                ? Vector3.ProjectOnPlane(knockBackDir, hit.normal).normalized       // align the direction to the slope of Ground
+                : knockBackDir;        // error handler case when Raycast does not hit GroundLayer
+        }
 
 #region Animation events
 
@@ -90,6 +114,31 @@ namespace BaseObjects.Enemy
         {
             if(m_EnemyHitbox.activeSelf)
                 m_EnemyHitbox.SetActive(false);
+        }
+
+#endregion
+        
+#region Draw
+
+        void OnDrawGizmos()
+        {
+            Vector3 enemyPosition = transform.position;
+            Gizmos.color = Color.yellow;
+            
+            Gizmos.DrawLine(enemyPosition, enemyPosition + _knockbackDir * _knockbackMag);       // Draw a line representing the attack direction
+            DrawArrowHead(enemyPosition + _knockbackDir * _knockbackMag, _knockbackDir);    // Draw an arrowhead at the end of the attack direction line (for better visualization)
+        }
+
+        private void DrawArrowHead(Vector3 position, Vector3 direction)
+        {
+            float arrowHeadLength = 0.5f;
+            float arrowHeadAngle = 20.0f;
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * Vector3.forward;
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * Vector3.forward;
+
+            Gizmos.DrawLine(position, position + right * arrowHeadLength);
+            Gizmos.DrawLine(position, position + left * arrowHeadLength);
         }
 
 #endregion
