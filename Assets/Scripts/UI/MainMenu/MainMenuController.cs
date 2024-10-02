@@ -17,6 +17,8 @@ public class MainMenuController : Singleton<MainMenuController>
     {
         base.Start();
         MenuCameraSwitcher.SwitchCamera(MenuCam);
+        OnRaftChange(GameManager.Instance.ActiveRaft);
+        OnWeaponChange(GameManager.Instance.SelectedWeapon);
     }
 
     private void OnEnable()
