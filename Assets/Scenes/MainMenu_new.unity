@@ -4017,7 +4017,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   m_FloatingJoystick: {fileID: 1093361889}
-  m_CameraHolder: {fileID: 1098555578}
   m_RunParticles: {fileID: 679471879}
   _isPlayerMoving: 0
   m_AimAlwaysForward: 1
@@ -12050,7 +12049,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 75
+  field of view: 61.8
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -12076,8 +12075,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1098555574}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3069429, y: -0.63003457, z: 0.29848886, w: 0.6478789}
-  m_LocalPosition: {x: -2.8, y: 11.9, z: 2.14}
+  m_LocalRotation: {x: -0.030873656, y: -0.33798116, z: -0.011093903, w: 0.94058096}
+  m_LocalPosition: {x: 11.22, y: 10.72, z: -8.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18094,7 +18093,7 @@ MonoBehaviour:
     Pivot: {fileID: 1480555828}
   m_Rh: {fileID: 338498669}
   m_Lh: {fileID: 182064548}
-  IsInteractionEnabled: 1
+  IsInteractionEnabled: 0
 --- !u!135 &2122920187
 SphereCollider:
   m_ObjectHideFlags: 0

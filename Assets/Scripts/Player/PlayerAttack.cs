@@ -192,7 +192,7 @@ namespace BaseObjects.Player
             TakeDamageEffect.Instance.TakeDamage();
 
             // frame freeze
-            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .1f);
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .12f);
 
             // push back
             m_Player.Rb.AddForce(knockbackDirection * m_HitKnockbackForce);

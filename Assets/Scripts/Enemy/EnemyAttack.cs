@@ -59,7 +59,7 @@ namespace BaseObjects.Enemy
             Debug.Log($"=> camShake: {remappedValueForCameraShake}; knockback: {remappedValueForKnockbackMagnitude}");
             CameraHolder.Instance.TriggerCameraShake(.2f, remappedValueForCameraShake, .15f);
             // frame freeze
-            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .1f);
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .14f);
             if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)
             {
                 if(m_EnemyHitbox.activeSelf)

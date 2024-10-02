@@ -29,10 +29,12 @@ namespace BaseObjects.Player
 
         private void Update()
         {
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.P))
                 PickItem();
             else if (Input.GetKeyDown(KeyCode.L))
                 DropItem();
+#endif
         }
 
         /// <summary>
