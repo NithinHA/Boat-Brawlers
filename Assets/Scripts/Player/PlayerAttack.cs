@@ -39,6 +39,7 @@ namespace BaseObjects.Player
         [Header("Particles")]
         [SerializeField] private GameObject m_GroundImpactParticles;
         [SerializeField] private GameObject m_HeavyAttachParticles;
+        [SerializeField] private GameObject m_DamageParticles;
         
         private float _damageCooldownTimer = 0f;
         private bool _isPlayingDamageAnim = false;
@@ -75,21 +76,25 @@ namespace BaseObjects.Player
                 _damageCooldownTimer -= Time.deltaTime;
             }
             
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.K))
                 Attack();
             else if (Input.GetKeyDown(KeyCode.J))
                 Attack(true);
             else if (Input.GetKeyDown(KeyCode.O))
-                TakeDamage(-transform.forward.normalized);
+                TakeDamage(-transform.forward.normalized, transform.position);
+#endif
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag(Constants.Tags.ENEMY_ATTACK_HITBOX))
             {
-                Vector3 knockbackDirection = transform.position - other.transform.position;
+                Vector3 position = transform.position;
+                Vector3 knockbackDirection = position - other.transform.position;
                 knockbackDirection.y = 0;
-                TakeDamage(knockbackDirection.normalized);
+                Vector3 hitPoint = other.ClosestPoint(position); 
+                TakeDamage(knockbackDirection.normalized, hitPoint);
             }
         }
 
@@ -177,7 +182,7 @@ namespace BaseObjects.Player
             m_Player.Anim.SetTrigger(Constants.Animation.ATTACK);
         }
 
-        public void TakeDamage(Vector3 knockbackDirection)
+        public void TakeDamage(Vector3 knockbackDirection, Vector3 hitPoint)
         {
             if (_damageCooldownTimer > 0)
             {
@@ -185,14 +190,16 @@ namespace BaseObjects.Player
             }
 
             _damageCooldownTimer = m_DefaultDamageCooldownTime;
-            // play damage fx
             m_Player.PlayerMovement.IsMovementEnabled = false;
             m_Player.PlayerInteraction.IsInteractionEnabled = false;
+            // play damage fx
             CameraHolder.Instance.TriggerCameraShake(.3f, 3f, .2f);
             TakeDamageEffect.Instance.TakeDamage();
+            m_DamageParticles.transform.position = hitPoint;
+            m_DamageParticles.SetActive(true);
 
             // frame freeze
-            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .12f);
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, .15f);
 
             // push back
             m_Player.Rb.AddForce(knockbackDirection * m_HitKnockbackForce);

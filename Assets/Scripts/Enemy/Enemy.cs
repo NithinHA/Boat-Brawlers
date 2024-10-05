@@ -9,7 +9,6 @@ namespace BaseObjects.Enemy
     {
         [Header("Locomotion info")]
         [SerializeField] private float m_NextLeapWaitTime = 5f;
-        [SerializeField] private float m_LeapMagnitude = 2f;
         [SerializeField] private float m_DirectTowardsPlayerDelay = .5f;
         [Header("Health info")]
         [SerializeField] private float m_MaxHealth = 100f;
@@ -31,7 +30,6 @@ namespace BaseObjects.Enemy
         private float _leapTimer;
         private Sequence _chargingSequence = null;
         private float _timeSinceSpawn;
-        private Vector3 _attackDir = Vector3.zero;
 
         public enum EnemyState
         {
@@ -146,21 +144,13 @@ namespace BaseObjects.Enemy
         {
             ChangeState(EnemyState.Attack);
             Anim.SetTrigger(Constants.Animation.ATTACK);
-            _attackDir = GetAttackDirection();
-            Rb.AddForce(_attackDir * m_LeapMagnitude, ForceMode.Impulse);
+            
             m_EnemyAttack.Attack(() =>
             {
                 _leapTimer = m_NextLeapWaitTime;
                 ChangeState(EnemyState.Idle);
                 Rb.velocity = Vector3.zero;
             });
-        }
-        
-        Vector3 GetAttackDirection()
-        {
-            return Physics.Raycast(transform.position, Vector3.down, out var hit, 1f, m_GroundLayer)
-                ? Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized      // align the direction to the slope of Ground
-                : transform.forward;        // error handler case when Raycast does not hit GroundLayer
         }
 
         internal void OnTakeDamage(float amount)
@@ -225,30 +215,6 @@ namespace BaseObjects.Enemy
             return Quaternion.LookRotation(playerDir);
         }
 
-#region Draw
-
-        void OnDrawGizmosSelected()
-        {
-            Vector3 enemyPosition = transform.position;
-            Gizmos.color = Color.red;
-            
-            Gizmos.DrawLine(enemyPosition, enemyPosition + _attackDir * m_LeapMagnitude);       // Draw a line representing the attack direction
-            DrawArrowHead(enemyPosition + _attackDir * m_LeapMagnitude, _attackDir);    // Draw an arrowhead at the end of the attack direction line (for better visualization)
-        }
-
-        private void DrawArrowHead(Vector3 position, Vector3 direction)
-        {
-            float arrowHeadLength = 0.5f;
-            float arrowHeadAngle = 20.0f;
-
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * Vector3.forward;
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * Vector3.forward;
-
-            Gizmos.DrawLine(position, position + right * arrowHeadLength);
-            Gizmos.DrawLine(position, position + left * arrowHeadLength);
-        }
-
-#endregion
     }
 
     public enum EnemyDeathCause

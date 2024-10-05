@@ -3776,7 +3776,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 36
+  field of view: 30
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3802,8 +3802,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1773642747}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: -0.00000011920929, y: 8.074643, z: -7.2094316}
+  m_LocalRotation: {x: 0.086322725, y: 0, z: 0, w: 0.99626726}
+  m_LocalPosition: {x: 0, y: 2.1, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6692,33 +6692,88 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
         type: 3}
+      propertyPath: Waves.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[3].WaveEnemyCount
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[4].WaveEnemyCount
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
       propertyPath: Waves.Array.data[0].PreWaveEnemyCount
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
         type: 3}
       propertyPath: Waves.Array.data[1].PreWaveEnemyCount
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
         type: 3}
       propertyPath: Waves.Array.data[2].PreWaveEnemyCount
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[3].PreWaveEnemyCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[4].PreWaveEnemyCount
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
         type: 3}
       propertyPath: Waves.Array.data[0].TimeBeforeWaveBegin
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
         type: 3}
       propertyPath: Waves.Array.data[1].TimeBeforeWaveBegin
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
         type: 3}
       propertyPath: Waves.Array.data[2].TimeBeforeWaveBegin
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[3].TimeBeforeWaveBegin
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[4].TimeBeforeWaveBegin
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[1].AvgTimeBetweenEnemySpawns
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[2].AvgTimeBetweenEnemySpawns
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[3].AvgTimeBetweenEnemySpawns
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3487804712064828093, guid: 88d8058b2aef24b83a1ed64dbd63c461,
+        type: 3}
+      propertyPath: Waves.Array.data[4].AvgTimeBetweenEnemySpawns
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

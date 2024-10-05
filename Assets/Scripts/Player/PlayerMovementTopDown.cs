@@ -160,7 +160,8 @@ namespace BaseObjects.Player
         {
             IsMovementEnabled = false;
             m_Player.PlayerInteraction.DropItem();
-            m_Player.Anim.SetTrigger(Constants.Animation.VICTORY);
+            if (isWin)
+                m_Player.Anim.SetTrigger(Constants.Animation.VICTORY);
         }
 
 #endregion
