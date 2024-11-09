@@ -162,7 +162,8 @@ namespace BaseObjects.Enemy
                 return;
             }
 
-            AudioManager.Instance.PlaySound(_impactSounds[Random.Range(0, _impactSounds.Length)]);
+            string attackSound = _impactSounds[Random.Range(0, _impactSounds.Length)];
+            AudioManager.Instance.PlaySound(attackSound);
             _leapTimer = m_NextLeapWaitTime;
             Anim.SetTrigger(Constants.Animation.DAMAGE);
 

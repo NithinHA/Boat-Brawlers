@@ -7,7 +7,7 @@ namespace BaseObjects.Enemy
     public class EnemyAttack : MonoBehaviour
     {
         [SerializeField] private Enemy m_Enemy;
-        [SerializeField] private GameObject m_EnemyHitbox;
+        [SerializeField] private Renderer m_EnemyHitbox;
         [SerializeField] private Vector2 m_HitKnockbackRange = new Vector2(200, 350);
         [Space]
         [SerializeField] private float m_LeapMagnitude = 6f;
@@ -17,6 +17,18 @@ namespace BaseObjects.Enemy
         [SerializeField] private GameObject m_GroundImpactParticles;
         [SerializeField] private Vector2 m_CamShakeEnemyKnockbackRange = new Vector2(3, 6);
 
+        [Header("CounterAttack properties")]
+        [SerializeField] private float m_CounterAttackKnockbackMagnitude = 550;
+        [SerializeField] private float m_CounterAttackCamShake = 8;
+        [Space]
+        [SerializeField] private float m_DefaultFrameFreeze = .14f;
+        [SerializeField] private float m_CounterAttackFrameFreeze = .2f;
+        [Space]
+        [SerializeField] private Color m_HitboxNormalColor;
+        [SerializeField] private Color m_HitboxCounterAttackColor;
+        
+
+        private static readonly int MainColor = Shader.PropertyToID("_MainColor");
         private Action _onAttackAnimComplete;
         private Vector3 _attackDir;
 
@@ -59,12 +71,13 @@ namespace BaseObjects.Enemy
 
 #region Take Damage
 
-        private bool _isCounterAttack;
+        private bool _isCounterAttack;      // no need for it to be global.
+
         public void TakeDamage(float amount, Vector3 knockbackDirection)
         {
             _isCounterAttack = m_Enemy.CurrentState == Enemy.EnemyState.Attack;     // checks if the enemy was in middle of an attack when the player countered.
 
-            _knockbackMag = _isCounterAttack ? 550 : Mathf.Clamp(Utilities.Remap(amount, new Vector2(0, 100), m_HitKnockbackRange),
+            _knockbackMag = _isCounterAttack ? m_CounterAttackKnockbackMagnitude : Mathf.Clamp(Utilities.Remap(amount, new Vector2(0, 100), m_HitKnockbackRange),
                 m_HitKnockbackRange.x, m_HitKnockbackRange.y);
             m_Enemy.Rb.AddForce(knockbackDirection * _knockbackMag);
             // particles
@@ -73,17 +86,19 @@ namespace BaseObjects.Enemy
             // perform cooldown
             ObjectBlinkHandler.Instance.BlinkOnce(m_Enemy.GetRenderer(), Color.red, m_BlinkDuration, 20);
             // camera shake
-            float remappedValueForCameraShake = _isCounterAttack ? 8 :
+            float remappedValueForCameraShake = _isCounterAttack ? m_CounterAttackCamShake :
                 Mathf.Clamp(Utilities.Remap(amount, new Vector2(0, 100), m_CamShakeEnemyKnockbackRange),
                     m_CamShakeEnemyKnockbackRange.x, m_CamShakeEnemyKnockbackRange.y);
             Debug.Log($"=> camShake: {remappedValueForCameraShake}; knockback: {_knockbackMag}");
             CameraHolder.Instance.TriggerCameraShake(.2f, remappedValueForCameraShake, .15f);
             // frame freeze
-            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, _isCounterAttack ? .18f: .14f);
-            if (m_Enemy.CurrentState == Enemy.EnemyState.Attack)
+            FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, _isCounterAttack ? m_CounterAttackFrameFreeze: m_DefaultFrameFreeze);
+            if (_isCounterAttack)
             {
-                if(m_EnemyHitbox.activeSelf)
-                    m_EnemyHitbox.SetActive(false);
+                AudioManager.Instance.PlaySound(Constants.SoundNames.ATTACK_REVERSAL);
+                m_EnemyHitbox.material.SetColor(MainColor, m_HitboxCounterAttackColor);
+                if(m_EnemyHitbox.gameObject.activeSelf)
+                    m_EnemyHitbox.gameObject.SetActive(false);
 
                 _onAttackAnimComplete?.Invoke();
                 _onAttackAnimComplete = null;
@@ -110,14 +125,12 @@ namespace BaseObjects.Enemy
 
         public virtual void AnimEvent_AttackBegin()
         {
-            m_EnemyHitbox.SetActive(true);
             AudioManager.Instance.PlaySound(Constants.SoundNames.ENEMY_LEAP);
-
+            m_EnemyHitbox.material.SetColor(MainColor, m_HitboxNormalColor);
         }
 
         public virtual void AnimEvent_AttackEnd()
         {
-            m_EnemyHitbox.SetActive(false);
         }
 
         public void AnimEvent_AttackComplete()
@@ -134,8 +147,8 @@ namespace BaseObjects.Enemy
 
         public void AnimEvent_KnockbackEnd()
         {
-            if(m_EnemyHitbox.activeSelf)
-                m_EnemyHitbox.SetActive(false);
+            if(m_EnemyHitbox.gameObject.activeSelf)
+                m_EnemyHitbox.gameObject.SetActive(false);
         }
 
 #endregion

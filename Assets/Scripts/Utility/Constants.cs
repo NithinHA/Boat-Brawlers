@@ -54,7 +54,9 @@ public class Constants
         public const string ENEMY_IMPACT_2 = "EnemyImpact_2";
         public const string ENEMY_DEATH = "EnemyDeath";
         public const string ENEMY_DEATH_OVERBOARD = "EnemyDeathOverboard";
+        public const string ATTACK_REVERSAL = "AttackReversal";
 
+        public const string PLAYER_IMPACT = "PlayerImpact";
         public const string PLAYER_FALL = "PlayerFall";
         public const string PLAYER_KICK = "PlayerKick";
         public const string WEAPON_SWING = "WeaponSwing";
