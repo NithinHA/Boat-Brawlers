@@ -252,7 +252,7 @@ namespace BaseObjects.Player
                 }
                 hitbox.gameObject.SetActive(true);
                 _playerHitboxes.Add(hitbox.gameObject);
-                hitbox.radius = hitboxInfo.Radius;
+                hitbox.transform.localScale = Vector3.one * hitboxInfo.Radius * 2;      // Keep the hitbox radius constant at 0.5, and change the object scale instead.
             }
         }
 
