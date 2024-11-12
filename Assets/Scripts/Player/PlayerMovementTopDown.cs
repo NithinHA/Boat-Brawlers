@@ -95,7 +95,9 @@ namespace BaseObjects.Player
             {
                 mPlayerMovement.Normalize();
                 mPlayerMovement *= _curSpeed * Time.deltaTime;
-                m_Player.Rb.MovePosition(transform.position + mPlayerMovement);
+
+                MoveAsPerConstraints();
+
                 if (!_isPlayerMoving)
                     TogglePlayerMovementBoolean(true);
             }
@@ -104,6 +106,38 @@ namespace BaseObjects.Player
                 if (_isPlayerMoving)
                     TogglePlayerMovementBoolean(false);
             }
+        }
+
+        private void MoveAsPerConstraints()
+        {
+            Vector3 currentPos = transform.position;
+            Vector3 destination = currentPos + mPlayerMovement;
+            Transform raftTransform = RaftController_Custom.Instance.transform;
+            Vector3 localPos = raftTransform.InverseTransformPoint(destination);    // gives positions with respect to the raft space.
+            Vector3 raftBounds = RaftController_Custom.Instance.GetPlatformBounds();
+
+            bool exceedX = Mathf.Abs(localPos.x) > Mathf.Abs(raftBounds.x);         // whether the player's next position crosses the raft boundaries on X axis.
+            bool exceedZ = Mathf.Abs(localPos.z) > Mathf.Abs(raftBounds.z);         // whether the player's next position crosses the raft boundaries on Y axis.
+
+            if (exceedX && exceedZ)     // if exceed on both axes, then make no movement.
+            {
+                return;
+            }
+
+            if (exceedX)
+            {
+                localPos.x = Mathf.Clamp(localPos.x, -raftBounds.x, raftBounds.x);
+                destination = raftTransform.TransformPoint(localPos);           // conversion back from raft space to world space.
+                destination.z = currentPos.z + mPlayerMovement.z;       // slide along the Z axis without making any movement on X axis.
+            }
+            else if (exceedZ)
+            {
+                localPos.z = Mathf.Clamp(localPos.z, -raftBounds.z, raftBounds.z);
+                destination = raftTransform.TransformPoint(localPos);           // conversion back from raft space to world space.
+                destination.x = currentPos.x + mPlayerMovement.x;       // slide along the X axis without making any movement on Z axis.
+            }
+
+            m_Player.Rb.MovePosition(destination);
         }
 
         private void AimTowardsMouse()

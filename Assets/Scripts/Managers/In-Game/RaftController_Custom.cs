@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BaseObjects;
 using DG.Tweening;
 using UnityEditor;
-using Random = System.Random;
 
 public class RaftController_Custom : Singleton<RaftController_Custom>
 {
@@ -18,6 +16,7 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
     [Space]
     [SerializeField] private Rigidbody m_Rb;
     [SerializeField] private Transform m_Pivot;
+    [SerializeField] private BoxCollider m_PlatformBounds;
     [Space]
     [SerializeField] private ResultantVectorIndicator m_Indicator;
     [SerializeField] private Vector2 m_CamShakeOnGameOver = new Vector2(5f, 3f);
@@ -30,6 +29,9 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
 
     private Vector3 _instantaneousTorque = Vector3.zero;
     private Tween _instantaneousTorqueCooldownTween;
+
+    private Vector3 _localTilt180;       // holds the current raft tilt [-180, 180]
+    private Vector3? _platformBounds = null;
 
     private AudioSource _raftBgAudio;
 
@@ -73,9 +75,9 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
         PerformTilting();
         m_Indicator.UpdateIndicator(_resultant, m_WeightMultiplier);
         Vector3 localRot = transform.localRotation.eulerAngles;
-        Vector3 localRot180 = new Vector3(Mathf.Repeat(localRot.x + 180, 360) - 180, 0, Mathf.Repeat(localRot.z + 180, 360) - 180);     // angle (-180, 180)
-        UpdateRaftCrackingSound(localRot180);
-        CheckForGameOver(localRot180);
+        _localTilt180 = new Vector3(Mathf.Repeat(localRot.x + 180, 360) - 180, 0, Mathf.Repeat(localRot.z + 180, 360) - 180);     // angle (-180, 180)
+        UpdateRaftCrackingSound();
+        CheckForGameOver();
     }
     
 #endregion
@@ -106,24 +108,24 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
         }
     }
 
-    private void UpdateRaftCrackingSound(Vector3 localRot180)
+    private void UpdateRaftCrackingSound()
     {
-        float diff = Mathf.Min(Mathf.Abs(m_TumbleThreshold) - Mathf.Abs(localRot180.x), Mathf.Abs(m_TumbleThreshold) - Mathf.Abs(localRot180.z));
-        float amount = 1 - diff / m_TumbleThreshold;        // [0, 1]
+        float amount = GetTiltPercent01();
         if(_raftBgAudio != null)
             _raftBgAudio.volume = amount * .8f;
 
     }
 
-    private void CheckForGameOver(Vector3 localRot180)
+    private void CheckForGameOver()
     {
-        if(Mathf.Abs(localRot180.x) > m_TumbleThreshold || Mathf.Abs(localRot180.z) > m_TumbleThreshold)
+        float tiltAmount = GetTiltPercent01();
+        if (tiltAmount >= 1)
         {
             if(_instantaneousTorqueCooldownTween != null)
                 _instantaneousTorqueCooldownTween.Kill();
 
             m_Rb.isKinematic = false;
-            Debug.Log("DIEDED! (" + localRot180 + ")");
+            Debug.Log("DIEDED! (" + tiltAmount + ")");
             CameraHolder.Instance.TriggerCameraShake(.8f, 1, .2f);
             CameraHolder.Instance.PlayerCam.Follow = null;
             AudioManager.Instance.StopSound(Constants.SoundNames.RAFT_BG);
@@ -146,6 +148,24 @@ public class RaftController_Custom : Singleton<RaftController_Custom>
         hitForce.y = 0;
         _instantaneousTorque = new Vector3(hitForce.z, 0, -hitForce.x);     // If the resultant vector is on X axis- Rotate along Z axis; resultant vector is on Z axis- Rotate along X axis
         _instantaneousTorqueCooldownTween = DOTween.To(() => _instantaneousTorque, x => _instantaneousTorque = x, Vector3.zero, 1.5f).SetEase(Ease.OutExpo);
+    }
+
+    /// <summary>
+    /// Returns value between 0-1; 0 being completely stable; 1 being the point where the raft tumbles and falls.
+    /// </summary>
+    public float GetTiltPercent01()
+    {
+        float tiltValue = Mathf.Max(Mathf.Abs(_localTilt180.x), Mathf.Abs(_localTilt180.z));
+        return Mathf.Clamp01(tiltValue / m_TumbleThreshold);
+    }
+
+    /// <summary>
+    /// Returns the platform boundary using a dummy collider.
+    /// </summary>
+    public Vector3 GetPlatformBounds()
+    {
+        _platformBounds ??= m_PlatformBounds.size * 0.5f;
+        return _platformBounds.Value;
     }
 
 #region Event listeners
