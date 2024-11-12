@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8705939794334335078}
-  - component: {fileID: 1314024335481133079}
   - component: {fileID: -6856826006940827485}
   m_Layer: 5
   m_Name: WaveProgressItemPrefab
@@ -41,14 +40,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1314024335481133079
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 342106526672108041}
-  m_CullTransparentMesh: 1
 --- !u!114 &-6856826006940827485
 MonoBehaviour:
   m_ObjectHideFlags: 0
