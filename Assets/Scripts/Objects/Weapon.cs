@@ -1,4 +1,5 @@
 using DG.Tweening;
+using UI;
 using UnityEngine;
 
 namespace BaseObjects
@@ -42,6 +43,7 @@ namespace BaseObjects
         {
             Transform hitT = HeavyAttackAnimInfo.HitboxInfo.Hitboxes[0].transform;
             RaftController_Custom.Instance.AddInstantaneousForce(hitT.position, 1f);
+            InGameUI.Instance.InGameScreen.PopupText.Show(Constants.PopupTextConstants.BOOM, transform.position);
             DOVirtual.DelayedCall(.05f, () =>
             {
                 Vector3 pos = hitT.position;

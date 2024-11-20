@@ -1,4 +1,5 @@
 using System;
+using UI;
 using UnityEngine;
 using VFX;
 
@@ -93,6 +94,7 @@ namespace BaseObjects.Enemy
             CameraHolder.Instance.TriggerCameraShake(.2f, remappedValueForCameraShake, .15f);
             // frame freeze
             FrameFreezeHandler.Instance.PerformFrameFreeze(.05f, _isCounterAttack ? m_CounterAttackFrameFreeze: m_DefaultFrameFreeze);
+            string popupText = $"-{amount}";
             if (_isCounterAttack)
             {
                 AudioManager.Instance.PlaySound(Constants.SoundNames.ATTACK_REVERSAL);
@@ -102,6 +104,8 @@ namespace BaseObjects.Enemy
 
                 _onAttackAnimComplete?.Invoke();
                 _onAttackAnimComplete = null;
+                popupText = Constants.PopupTextConstants.REVERSAL;
+                InGameUI.Instance.InGameScreen.PopupText.Show(popupText, transform.position);
             }
 
             m_Enemy.OnTakeDamage(amount);

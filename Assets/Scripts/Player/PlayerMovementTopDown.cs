@@ -112,6 +112,12 @@ namespace BaseObjects.Player
         {
             Vector3 currentPos = transform.position;
             Vector3 destination = currentPos + mPlayerMovement;
+            if(RaftController.Instance == null)
+            {
+                m_Player.Rb.MovePosition(destination);
+                return;
+            }
+
             Transform raftTransform = RaftController_Custom.Instance.transform;
             Vector3 localPos = raftTransform.InverseTransformPoint(destination);    // gives positions with respect to the raft space.
             Vector3 raftBounds = RaftController_Custom.Instance.GetPlatformBounds();

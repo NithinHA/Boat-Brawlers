@@ -16,7 +16,9 @@ namespace UI.Screens
         [Space]
         [SerializeField] private RectTransform m_WaveInfoRect;
         [SerializeField] private TextMeshProUGUI m_WaveInfoText;
+        [SerializeField] private TextPopupController m_TextPopup;
         [SerializeField] private string[] m_WaveMessages;
+        public TextPopupController PopupText;
 
         private void Start()
         {

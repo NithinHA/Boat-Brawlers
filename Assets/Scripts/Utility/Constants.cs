@@ -66,4 +66,10 @@ public class Constants
         public const string RAFT_FALL = "RaftFall";
         public const string RAFT_SINK = "RaftSink";
     }
+
+    public class PopupTextConstants
+    {
+        public const string REVERSAL = "Reversal!";
+        public const string BOOM = "BOOM!";
+    }
 }
