@@ -18,11 +18,14 @@ namespace BaseObjects
         [SerializeField] private InventorySelectionBubble m_InventorySelectionBubblePrefab;
         [SerializeField] private RectTransform m_BubbleParent;
         [SerializeField] private Vector3 m_HighlightBubbleOffset = Vector3.up;
+        [SerializeField] private Renderer m_Renderer;
         [Space]
         [SerializeField] private Rigidbody m_Rb;
         [SerializeField] private Collider[] m_Colliders;
 
         private InventorySelectionBubble _currentBubble = null;
+        private Material _materialInstance;
+        private const string _materialProperty = "_switch";
 
         protected override void Start()
         {
@@ -31,6 +34,8 @@ namespace BaseObjects
 
             if (m_Rb == null)
                 m_Rb = GetComponent<Rigidbody>();
+
+            _materialInstance = m_Renderer.material;
         }
 
         public void SetHighlight()
@@ -41,8 +46,9 @@ namespace BaseObjects
             // code to highlight the object
             _currentBubble = Instantiate(m_InventorySelectionBubblePrefab, m_BubbleParent);
             _currentBubble.SetTarget(this.transform, m_HighlightBubbleOffset);
-
             InteractablesController.Instance.HighlightedObject = this;
+
+            _materialInstance.SetFloat(_materialProperty, 1.0f);
         }
 
         public void RemoveHighlight()
@@ -55,6 +61,8 @@ namespace BaseObjects
             }
 
             InteractablesController.Instance.HighlightedObject = null;
+
+            _materialInstance.SetFloat(_materialProperty, 0.0f);
         }
 
         public void Pick()

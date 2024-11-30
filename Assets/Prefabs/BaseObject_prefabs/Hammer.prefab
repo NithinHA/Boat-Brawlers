@@ -485,7 +485,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5154357489921590979, guid: 48f8c45aadd3c40ebac6da49697edd22, type: 3}
+  - {fileID: 2100000, guid: 15bec4314e34f8a45996494d24f47428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -638,6 +638,7 @@ MonoBehaviour:
     type: 3}
   m_BubbleParent: {fileID: 0}
   m_HighlightBubbleOffset: {x: 0, y: 0, z: 0}
+  m_Renderer: {fileID: 801153142751050814}
   m_Rb: {fileID: 2283392925981169320}
   m_Colliders:
   - {fileID: 2283392925981169323}

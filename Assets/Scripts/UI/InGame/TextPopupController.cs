@@ -25,7 +25,7 @@ namespace UI
             {
                 DOVirtual.DelayedCall(m_Delay, () => {
                     popupTransform.DOScale(Vector3.zero, .1f).SetEase(Ease.InBack).OnComplete(() => {
-                        Destroy(popupTransform);
+                        Destroy(popupTransform.gameObject);
                     });
                 });
             });

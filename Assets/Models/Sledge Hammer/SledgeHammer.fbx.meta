@@ -3,7 +3,12 @@ guid: 48f8c45aadd3c40ebac6da49697edd22
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SledgeHammer
+    second: {fileID: 2100000, guid: 15bec4314e34f8a45996494d24f47428, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

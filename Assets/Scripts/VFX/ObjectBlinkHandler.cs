@@ -20,9 +20,10 @@ namespace VFX
 
             // Clone the material so it affects only this specific object
             Material clonedMaterial = render.material;
-            clonedMaterial.EnableKeyword("_EMISSION");
 
-            DOTween.To(() => 0f, emission => { clonedMaterial.SetColor(EmissionColor, color * emission); }, intensity, duration)
+            DOTween.To(() => 0f, emission => {
+                clonedMaterial.SetColor(EmissionColor, color * emission);
+            }, intensity, duration)
                 .SetEase(Ease.OutCubic)
                 .OnComplete(() => StopBlinking(clonedMaterial));
         }
@@ -35,7 +36,6 @@ namespace VFX
             if (material != null)
             {
                 material.SetColor(EmissionColor, Color.black);
-                material.DisableKeyword("_EMISSION");
             }
         }
     }
