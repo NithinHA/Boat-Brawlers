@@ -1,17 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class ResultantVectorIndicator : MonoBehaviour
 {
-    [SerializeField] private Transform m_ArrowTail;
-    [SerializeField] private Transform m_ArrowHead;
-    [SerializeField] private float m_TailScaleMultiplier = .4f;
-    [SerializeField] private float m_HeadDisplacementMultiplier = .5f;
-    [SerializeField] private Vector2 m_Range = new Vector2(.5f, 1f);
+    [SerializeField] private LineRenderer m_Line;
+    [SerializeField] private float m_MinThreshold = 1;  // if resultant is below this value, don't show indicator.
+    [Space]
+    [SerializeField] private float m_ResultantMagnitudeMultiplier = 1.5f;
     [SerializeField] private Transform m_RaftT;
+
+    Vector3[] _linePositions;
+    Vector3[] _defaultLinePositions = new Vector3[] { Vector3.zero, Vector3.zero };
+
+    private void Awake()
+    {
+        m_Line.positionCount = 2;
+    }
 
     public void UpdateIndicator(Vector3 resultant, float raftWeightMultiplier)
     {
@@ -20,14 +23,15 @@ public class ResultantVectorIndicator : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(resultant, Vector3.up) * Quaternion.Euler(0, -m_RaftT.eulerAngles.y, 0);
         transform.localRotation = rotation;
 
-        // position arrow_head
-        m_ArrowHead.localPosition = Vector3.forward * resultantMagnitude * m_HeadDisplacementMultiplier;
+        // set LineRenderer positions
+        Vector3 startPos = transform.position;
+        Vector3 endPos = Vector3.forward * resultantMagnitude * m_ResultantMagnitudeMultiplier;
 
-        // scale arrow_tail
-        Vector3 localScale = m_ArrowTail.localScale;
-        localScale = new Vector3(resultantMagnitude * m_TailScaleMultiplier, localScale.y, localScale.z);
-        m_ArrowTail.localScale = localScale;
-        
-        // scale tail 
+        _linePositions = _defaultLinePositions;
+
+        if (resultant.magnitude > m_MinThreshold)
+            _linePositions = new Vector3[] { startPos, endPos };
+
+        m_Line.SetPositions(_linePositions);
     }
 }
