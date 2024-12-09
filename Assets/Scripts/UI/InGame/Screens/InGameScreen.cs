@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using BaseObjects.Player;
 using DG.Tweening;
 using TMPro;
 using UI.ProgressBar;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace UI.Screens
@@ -61,21 +57,6 @@ namespace UI.Screens
             InGameUI.Instance.OnGamePause();
         }
         
-        public void OnClick_Attack()
-        {
-            Player.Instance.PlayerAttack.Attack();
-        }
-
-        public void OnClick_Pick()
-        {
-            Player.Instance.PlayerInteraction.PickItem();
-        }
-
-        public void OnClick_Drop()
-        {
-            Player.Instance.PlayerInteraction.DropItem();
-        }
-
 #endregion
     }
 }

@@ -11,6 +11,8 @@ public class AttackButtonUI : MonoBehaviour
     [SerializeField] private Image m_FillImage;
     [SerializeField] private RectTransform m_AtkButtonRect;
     [SerializeField] private float m_TimeToFill = 2f;
+    [Space]
+    [SerializeField] private GameObject m_SpaceText;
 
     private PlayerAttack _playerAttack;
     private float _fillDelta;
@@ -63,6 +65,20 @@ public class AttackButtonUI : MonoBehaviour
             .SetEase(Ease.InOutCubic);
     }
 
+#if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OnPointerDown_Attack();
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            OnPointerUp_Attack();
+        }
+    }
+#endif
+
     public void OnPointerDown_Attack()
     {
         // if held weapon
@@ -90,4 +106,13 @@ public class AttackButtonUI : MonoBehaviour
 
         ResetButtonCharge();
     }
+
+#region Handle platform specific items
+
+    public void SetupVisualPerPlatform(bool isMobile)
+    {
+        m_SpaceText.SetActive(!isMobile);
+    }
+
+#endregion
 }
