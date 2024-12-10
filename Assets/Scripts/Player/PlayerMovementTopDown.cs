@@ -60,13 +60,13 @@ namespace BaseObjects.Player
                 AimForward();
             else
                 AimTowardsMouse();
-        
-#if UNITY_EDITOR
-            float playerInputX = Input.GetAxis("Horizontal");
-            float playerInputY = Input.GetAxis("Vertical");
-#else
+
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
             float playerInputX = m_FloatingJoystick.Horizontal;
             float playerInputY = m_FloatingJoystick.Vertical;
+#else
+            float playerInputX = Input.GetAxis("Horizontal");
+            float playerInputY = Input.GetAxis("Vertical");
 #endif
 
             // bool didDive = Input.GetKeyDown(KeyCode.LeftControl);

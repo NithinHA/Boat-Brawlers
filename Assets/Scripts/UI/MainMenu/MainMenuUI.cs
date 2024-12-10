@@ -23,15 +23,22 @@ namespace UI
             base.Start();
             GameManager.Instance.PlayerMovementToggle?.Invoke(false);
             MenuCameraSwitcher.SwitchCamera(MainMenuController.Instance.MenuCam);
+
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
             GameManager.Instance.PlayerMovementToggle += OnPlayerMovementToggle;
+#else
+            OnPlayerMovementToggle(false);
+#endif
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
 
+#if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
             if (GameManager.Instance != null)
                 GameManager.Instance.PlayerMovementToggle -= OnPlayerMovementToggle;
+#endif
         }
 
         /// <summary>
